@@ -7,6 +7,7 @@ const categoryRoute = require('./routes/categoryRoutes');
 const AppError = require('./utils/appError');
 const globalErrors = require('./middlewares/errorMiddleware');
 
+
 // DB connection
 dbConnection()
 

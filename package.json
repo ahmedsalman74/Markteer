@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "rundev": "nodemon server.js", 
+    "rundev": "nodemon server.js",
     "run:prod": "NODE_ENV=production node server.js"
   },
   "keywords": [],
@@ -16,6 +16,7 @@
     "env": "^0.0.2",
     "express": "^4.18.2",
     "express-async-handler": "^1.2.0",
+    "express-validator": "^7.0.1",
     "mongoose": "^8.1.0",
     "morgan": "^1.10.0",
     "nodemon": "^3.0.2",
