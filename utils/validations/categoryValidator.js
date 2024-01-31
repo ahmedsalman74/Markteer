@@ -3,7 +3,7 @@ const validatorMiddleware = require('../../middlewares/validatorMiddleware');
 
 
 exports.getCategoryValidator = [
-    check('categoryid').isMongoId().withMessage('Invalid category id format'),
+    check('id').isMongoId().withMessage('Invalid category id format'),
     validatorMiddleware,
   ];
 
@@ -16,7 +16,7 @@ exports.getCategoryValidator = [
   ];
 
   exports.updateCategoryValidator = [
-    check('categoryid').isMongoId().withMessage('Invalid category id format'),
+    check('id').isMongoId().withMessage('Invalid category id format'),
     check('name').notEmpty().withMessage('Category name is required')
     .isLength({min:3}).withMessage('too short category name')
     .isLength({max:30}).withMessage('too long category name'),
@@ -26,7 +26,7 @@ exports.getCategoryValidator = [
   ];
 
   exports.deleteCategoryValidator = [
-    check('categoryid').isMongoId().withMessage('Invalid category id format'),
+    check('id').isMongoId().withMessage('Invalid category id format'),
     validatorMiddleware
 
   ];

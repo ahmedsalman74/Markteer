@@ -11,7 +11,7 @@ router.route('/')
     .get(getCategory)
     .post(creatCategoryValidator,createCategory)
 
-router.route('/:categoryid')
+router.route('/:id')
     .get(getCategoryValidator,getSingleCategory)
     .put(updateCategoryValidator,updateCategory)
     .delete(deleteCategoryValidator,DeleteCategory)

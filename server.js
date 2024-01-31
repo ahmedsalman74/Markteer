@@ -4,6 +4,7 @@ const dotenv = require('dotenv')
 dotenv.config({ path: 'config.env' })
 const dbConnection = require('./config/connections');
 const categoryRoute = require('./routes/categoryRoutes');
+const subCategoryRoute = require('./routes/subCategoryRoutes');
 const AppError = require('./utils/appError');
 const globalErrors = require('./middlewares/errorMiddleware');
 
@@ -26,6 +27,7 @@ if (NODE_ENV === 'development') {
 
 //router routes
 app.use('/api/v1/categories', categoryRoute);
+app.use('/api/v1/subCategories', subCategoryRoute);
 
 //error routes handler
 app.all('*', (req, res, next) => {
