@@ -27,7 +27,7 @@ const getCategory = asyncHandler(async (req, res, next) => {
 //@route GET /api/1/categories/:id
 //@access public
 const getSingleCategory = asyncHandler(async (req, res, next) => {
-    const categoryId = req.params.categoryid;
+    const categoryId = req.params.id;
     const category = await CategoryModel.findById({ "_id": categoryId });
 
     if (!category) {
@@ -66,7 +66,7 @@ const createCategory = asyncHandler(async (req, res, next) => {
 //@route PUT /api/1/categories/:id
 //@access private
 const updateCategory = asyncHandler(async (req, res, next) => {
-    const categoryId = req.params.categoryid;
+    const categoryId = req.params.id;
     const name = req.body.name;
     const category = await CategoryModel.findByIdAndUpdate(categoryId, { name, slug: slugify(name) }, { new: true });
     if (!category) {
@@ -85,7 +85,7 @@ const updateCategory = asyncHandler(async (req, res, next) => {
 //@route DELETE /api/1/categories/:id
 //@access private
 const DeleteCategory = asyncHandler(async (req, res, next) => {
-    const categoryId = req.params.categoryid;
+    const categoryId = req.params.id;
     const category = await CategoryModel.findByIdAndDelete(categoryId);
     if (!category) {
         return next(new AppError(`Category not found`, 404))

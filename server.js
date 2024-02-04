@@ -3,10 +3,12 @@ const morgan = require('morgan');
 const dotenv = require('dotenv')
 dotenv.config({ path: 'config.env' })
 const dbConnection = require('./config/connections');
-const categoryRoute = require('./routes/categoryRoutes');
-const subCategoryRoute = require('./routes/subCategoryRoutes');
 const AppError = require('./utils/appError');
 const globalErrors = require('./middlewares/errorMiddleware');
+//import routs
+const categoryRoute = require('./routes/categoryRoutes');
+const brandRoute = require('./routes/brandRoutes');
+const subCategoryRoute = require('./routes/subCategoryRoutes');
 
 
 // DB connection
@@ -27,6 +29,7 @@ if (NODE_ENV === 'development') {
 
 //router routes
 app.use('/api/v1/categories', categoryRoute);
+app.use('/api/v1/brands', brandRoute);
 app.use('/api/v1/subCategories', subCategoryRoute);
 
 //error routes handler
