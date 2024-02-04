@@ -6,10 +6,16 @@ const AppError = require('../utils/appError');
 
 
 
+const setCategoryIdToBody = (req, res, next) => {
+    // Nested route
+    if (!req.body.category) req.body.category = req.params.id;
+    next();
+  };
 //@desc create new subCategory
 //@route POST /api/v1/subcategories
 //@access private
 const createSubCategory = asyncHandler(async (req, res, next) => {
+    
     const { name, category } = req.body;
 
     const subCategories = await subCategory.create({
@@ -26,6 +32,13 @@ const createSubCategory = asyncHandler(async (req, res, next) => {
 
 })
 
+const createFilteredObject = (req, res, next) => {
+    let filteredObject = {};
+    if (req.params.id) filteredObject = { category: req.params.id };
+    req.filteredObject = filteredObject;
+    next()
+}
+
 //desc get subCategories
 //@route GET /api/v1/subcategories
 //@access public
@@ -35,9 +48,20 @@ const getSubCategories = asyncHandler(async (req, res, next) => {
     const limit = query.limit || 10;
     const page = query.page || 1;
     const skip = (page - 1) * limit;
-    const subCategories = await subCategory.find({}, { "__v": false }).limit(limit).skip(skip);;
+    console.log(req.params.id);
+    
+    const subCategories = await subCategory.find(req.filteredObject, { "__v": false })
+        .limit(limit)
+        .skip(skip)
+    // .populate({
+    //     path: 'category',
+    //     select: "name -_id"
+    // });
+
+
     res.status(200).json({
         result: subCategories.length,
+        page: page,
         status: 'success',
         data: {
             subCategories
@@ -71,7 +95,9 @@ const getSubCategory = asyncHandler(async (req, res, next) => {
 const updateSubCategory = asyncHandler(async (req, res, next) => {
     const subcategoryId = req.params.id;
     const { name, category } = req.body;
-    const Sub_Category = await subCategory.findByIdAndUpdate({ "_id": subcategoryId }, { name, category ,slug:slugify(name)}, { new: true, runValidators: true });
+    const Sub_Category = await subCategory.findByIdAndUpdate({ "_id": subcategoryId },
+        { name, category, slug: slugify(name) },
+        { new: true, runValidators: true });
 
     if (!Sub_Category) {
 
@@ -106,7 +132,9 @@ const deleteSubCategory = asyncHandler(async (req, res, next) => {
 
 
 
-module.exports ={ 
+module.exports = {
+    setCategoryIdToBody,
+    createFilteredObject,
     createSubCategory,
     getSubCategories,
     getSubCategory,
