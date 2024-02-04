@@ -1,7 +1,7 @@
-const CategoryModel = require('../models/categoryModel');
-const ascyncWatpper = require('../middlewares/ascyncWarpper');
+/* eslint-disable no-else-return */
 const slugify = require('slugify')
 const asyncHandler = require('express-async-handler')
+const CategoryModel = require('../models/categoryModel');
 const AppError = require('../utils/appError');
 
 //@desc get a list of categories

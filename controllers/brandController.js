@@ -1,14 +1,16 @@
-const brandModel = require('../models/brandModel');
-const ascyncWatpper = require('../middlewares/ascyncWarpper');
+/* eslint-disable no-else-return */
+
 const slugify = require('slugify')
 const asyncHandler = require('express-async-handler')
+const brandModel = require('../models/brandModel');
+
 const AppError = require('../utils/appError');
 
 //@desc get a list of brands
 //@route GET /api/1/brands
 //@access public
 const getBrands = asyncHandler(async (req, res, next) => {
-    const query = req.query;
+    const {query} = req;
     const limit = query.limit || 10;
     const page = query.page || 1;
     const skip = (page - 1) * limit;

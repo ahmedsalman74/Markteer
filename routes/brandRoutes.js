@@ -1,8 +1,16 @@
-const express = require('express');
 const router = require('express').Router();
-const { updateBrand, getBrands, createBrand, getSingleBrand, DeleteBrand } = require('../controllers/brandController');
-const validatorMiddleware = require('../middlewares/validatorMiddleware');
-const { getBrandValidator, updateBrandValidator, deleteBrandValidator, creatBrandValidator } = require('../utils/validations/brandValidator')
+const {
+    updateBrand,
+    getBrands,
+    createBrand,
+    getSingleBrand,
+    DeleteBrand } = require('../controllers/brandController');
+
+const {
+    getBrandValidator,
+    updateBrandValidator,
+    deleteBrandValidator,
+    creatBrandValidator } = require('../utils/validations/brandValidator')
 
 
 router.route('/')
