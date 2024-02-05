@@ -10,11 +10,10 @@ const productSchema = new mongoose.Schema({
     },
     slug: {
         type: String,
-        unique: true,
-        required: [true, 'slug is required'],
+        required: true,
         lowercase: true,
-    },
-    description: {
+      },
+    description: { 
         type: String,
         required: [true, 'description is required'],
         trim: true,

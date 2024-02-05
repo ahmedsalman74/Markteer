@@ -3,7 +3,7 @@ const slugify = require('slugify')
 const asyncHandler = require('express-async-handler')
 const AppError = require('../utils/appError');
 
-const productModel=require('../models/productModel');
+const productModel = require('../models/productModel');
 
 
 
@@ -18,7 +18,7 @@ const getProducts = asyncHandler(async (req, res, next) => {
     const limit = query.limit || 10;
     const page = query.page || 1;
     const skip = (page - 1) * limit;
-    const product = await productModel.find({}, { "__v": false }).limit(limit).skip(skip);;
+    const product = await productModel.find({}, { "__v": false }).limit(limit).skip(skip).populate({ path: 'category', select: 'name -_id' });
     res.status(200).json({
         result: product.length,
         status: 'success',
@@ -34,20 +34,21 @@ const getProducts = asyncHandler(async (req, res, next) => {
 //@access public
 const getSingleProduct = asyncHandler(async (req, res, next) => {
     const productId = req.params.id;
-    const product = await productModel.findById({ "_id": productId });
+    const product = await productModel.findById({ "_id": productId })
+        .populate({ path: 'category', select: 'name -_id' });
 
     if (!product) {
 
         return next(new AppError(`Product not found`, 404))
 
-    } 
-        res.status(200).json({
-            status: 'success',
-            data: {
-                product
-            }
-        });
-    
+    }
+    res.status(200).json({
+        status: 'success',
+        data: {
+            product
+        }
+    });
+
 });
 
 
@@ -56,8 +57,9 @@ const getSingleProduct = asyncHandler(async (req, res, next) => {
 //@route POST /api/1/products
 //@access private
 const createProduct = asyncHandler(async (req, res, next) => {
-   req.body.slug = slugify(req.body.name);
 
+    req.body.slug = slugify(req.body.title);
+    console.log(req.body.slug); // Log the generated slug
     const product = await productModel.create(req.body);
     res.status(201).json({
         status: 'success',
@@ -73,18 +75,19 @@ const createProduct = asyncHandler(async (req, res, next) => {
 //@access private
 const updateProduct = asyncHandler(async (req, res, next) => {
     const productId = req.params.id;
-    req.body.slug = slugify(req.body.name);
+    if (req.body.title) { req.body.slug = slugify(req.body.title); }
+
     const product = await productModel.findByIdAndUpdate(productId, req.body, { new: true });
     if (!product) {
         return next(new AppError(`product not found`, 404))
-    } 
-        res.status(200).json({
-            status: 'success',
-            data: {
-                product
-            }
-        });
-    
+    }
+    res.status(200).json({
+        status: 'success',
+        data: {
+            product
+        }
+    });
+
 })
 
 //desc delete product
@@ -95,14 +98,14 @@ const DeleteProduct = asyncHandler(async (req, res, next) => {
     const product = await productModel.findByIdAndDelete(productId);
     if (!product) {
         return next(new AppError(`product not found`, 404))
-    } 
-        res.status(200).json({
-            status: 'success',
-            data: {
-                product
-            }
-        });
-    
+    }
+    res.status(200).json({
+        status: 'success',
+        data: {
+            product
+        }
+    });
+
 })
 
 

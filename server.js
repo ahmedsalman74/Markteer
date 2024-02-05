@@ -8,6 +8,7 @@ const AppError = require('./utils/appError');
 const globalErrors = require('./middlewares/errorMiddleware');
 //import routs
 const categoryRoute = require('./routes/categoryRoutes');
+const productRoute = require('./routes/productRoutes');
 const brandRoute = require('./routes/brandRoutes');
 const subCategoryRoute = require('./routes/subCategoryRoutes');
 
@@ -30,6 +31,7 @@ if (NODE_ENV === 'development') {
 
 //router routes
 app.use('/api/v1/categories', categoryRoute);
+app.use('/api/v1/products', productRoute);
 app.use('/api/v1/brands', brandRoute);
 app.use('/api/v1/subCategories', subCategoryRoute);
 

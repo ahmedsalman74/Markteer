@@ -1,7 +1,5 @@
-const express = require('express');
 const router = require('express').Router();
 const { updateCategory, getCategory, createCategory, getSingleCategory, DeleteCategory } = require('../controllers/categoryController');
-const validatorMiddleware = require('../middlewares/validatorMiddleware');
 const { getCategoryValidator, updateCategoryValidator, deleteCategoryValidator, creatCategoryValidator } = require('../utils/validations/categoryValidator')
 
 
