@@ -59,7 +59,6 @@ const getSingleProduct = asyncHandler(async (req, res, next) => {
 const createProduct = asyncHandler(async (req, res, next) => {
 
     req.body.slug = slugify(req.body.title);
-    console.log(req.body.slug); // Log the generated slug
     const product = await productModel.create(req.body);
     res.status(201).json({
         status: 'success',

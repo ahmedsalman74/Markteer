@@ -34,57 +34,31 @@ exports.createProductValidator = [
                     if (!category)
                         return Promise.reject(new Error(`Invalid category id ${categoryId}`));
                 })),
-    // check('subCategory').optional()
-    //     .isMongoId()
-    //     .withMessage('Invalid ID formate')
-    //     .custom((subcategoriesIds) =>
-    //         subCategoryModel.find({ _id: { $exists: true, $in: subcategoriesIds } }).then(
-    //             (result) => {
-    //                 if (result.length < 1 || result.length !== subcategoriesIds.length) {
-    //                     return Promise.reject(new Error(`Invalid subcategories Ids`));
-    //                 }
-    //             }
-    //         )
-    //     )
-    //     .custom((val, { req }) =>
-    //         subCategoryModel.find({ category: req.body.category }).then(
-    //             (subcategories) => {
-    //                 const subCategoriesIdsInDB = [];
-    //                 subcategories.forEach((subCategory) => {
-    //                     subCategoriesIdsInDB.push(subCategory._id.toString());
-    //                 });
-    //                 // check if subcategories ids in db include subcategories in req.body (true)
-    //                 const checker = (target, arr) => target.every((v) => arr.includes(v));
-    //                 if (!checker(val, subCategoriesIdsInDB)) {
-    //                     return Promise.reject(
-    //                         new Error(`subcategories not belong to category`)
-    //                     );
-    //                 }
-    //             }
-    //         )
-    //     ),
+
 
     check('subCategory').optional().isMongoId().withMessage('Invalid subCategory id format')
-    .custom(async (subCategoriesId) => {
-        // Check if any subCategoriesId is invalid
-        const promises = subCategoriesId.map(async (subCategoryId) => {
-            const subCategory = await subCategoryModel.findById(subCategoryId);
-            if (!subCategory) {
-                throw new Error(`Invalid subCategory id ${subCategoryId}`);
-            }
-        });
-        // Wait for all promises to resolve
-        await Promise.all(promises);
-    })
-    .custom(async (subCategoriesId, { req }) => {
+        .custom(async (subCategoriesId) => {
+            // Check if any subCategoriesId is invalid
+            const promises = subCategoriesId.map(async (subCategoryId) => {
+
+                const subCategory = await subCategoryModel.findById(subCategoryId);
+
+                if (!subCategory) {
+                    throw new Error(`Invalid subCategory id ${subCategoryId}`);
+                }
+            });
+            // Wait for all promises to resolve
+            await Promise.all(promises);
+        })
+        .custom(async (subCategoriesId, { req }) => {
             // Check if any subCategoriesId is not belong to the category, 
             const category = await categoryModel.findById(req.body.category);
+
             const promises = subCategoriesId.map(async (subCategoryId) => {
                 const subCategory = await subCategoryModel.findById(subCategoryId);
-                console.log(subCategory.category.toString());
-                console.log(category.id);
+               
                 if (subCategory.category.toString() !== category.id) {
-                    throw new Error(`subCategory id ${subCategoryId} not belong to category id ${category.id}`);
+                    return new Error(`subCategory id ${subCategoryId} not belong to category id ${category.id}`);
                 }
             });
             // Wait for all promises to resolve
