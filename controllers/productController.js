@@ -22,20 +22,50 @@ const getProducts = asyncHandler(async (req, res, next) => {
 
     // advanced filter
     let queryString = JSON.stringify(queryStringObj);
+    // using regular expression to add $ sign to the query
     queryString = queryString.replace(/\b(gte|gt|lte|lt)\b/g, match => `$${match}`);
-    
-    
+
+
     // pagination
     const query = req.query;
     const limit = query.limit || 10;
     const page = query.page || 1;
     const skip = (page - 1) * limit;
 
-    
-    const product = await productModel.find(JSON.parse(queryString), { "__v": false })
+
+    let mongooseQuery = productModel.find(JSON.parse(queryString), { "__v": false })
         .limit(limit)
         .skip(skip)
         .populate({ path: 'category', select: 'name -_id' });
+
+    // sorting
+    if (req.query.sort) {
+        const sortBy = req.query.sort.split(',').join(' ');
+        mongooseQuery = mongooseQuery.sort(sortBy);
+    } else {
+        mongooseQuery = mongooseQuery.sort('-createdAt');
+    }
+
+    // field limiting
+    if (req.query.fields) {
+        const fields = req.query.fields.split(',').join(' ');
+        mongooseQuery = mongooseQuery.select(fields);
+    }
+
+    // search criteria
+    if (req.query.search) {
+        const queery={}
+        queery.$or = [
+            { title: { $regex: req.query.search, $options: 'i' } },
+            { description: { $regex: req.query.search, $options: 'i' } }
+        ];
+        mongooseQuery = productModel.find(queery)
+    }
+
+    const product = await mongooseQuery;
+
+
+
 
     res.status(200).json({
         result: product.length,
