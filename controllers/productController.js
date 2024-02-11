@@ -14,11 +14,29 @@ const productModel = require('../models/productModel');
 //@route GET /api/1/products
 //@access public
 const getProducts = asyncHandler(async (req, res, next) => {
+    // filter products
+
+    const queryStringObj = { ...req.query }
+    const removeFields = ['limit', 'page', 'sort', 'fields']
+    removeFields.forEach(el => delete queryStringObj[el]);
+
+    // advanced filter
+    let queryString = JSON.stringify(queryStringObj);
+    queryString = queryString.replace(/\b(gte|gt|lte|lt)\b/g, match => `$${match}`);
+    
+    
+    // pagination
     const query = req.query;
     const limit = query.limit || 10;
     const page = query.page || 1;
     const skip = (page - 1) * limit;
-    const product = await productModel.find({}, { "__v": false }).limit(limit).skip(skip).populate({ path: 'category', select: 'name -_id' });
+
+    
+    const product = await productModel.find(JSON.parse(queryString), { "__v": false })
+        .limit(limit)
+        .skip(skip)
+        .populate({ path: 'category', select: 'name -_id' });
+
     res.status(200).json({
         result: product.length,
         status: 'success',
