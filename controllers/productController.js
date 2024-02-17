@@ -2,7 +2,7 @@
 const slugify = require('slugify')
 const asyncHandler = require('express-async-handler')
 const AppError = require('../utils/appError');
-
+const factory = require('./handelersFactory');
 const productModel = require('../models/productModel');
 const ApiFeatures = require('../utils/apiFeatures');
 
@@ -26,8 +26,6 @@ const getProducts = asyncHandler(async (req, res, next) => {
     //execute the query
     const{mongooseQuery,paginationResults} = ApiFeaturesInstance;
     const product = await mongooseQuery.exec();
-
-
 
     res.status(200).json({
         paginationResults,
@@ -103,25 +101,8 @@ const updateProduct = asyncHandler(async (req, res, next) => {
 //desc delete product
 //@route DELETE /api/1/products/:id
 //@access private
-const DeleteProduct = asyncHandler(async (req, res, next) => {
-    const productId = req.params.id;
-    const product = await productModel.findByIdAndDelete(productId);
-    if (!product) {
-        return next(new AppError(`product not found`, 404))
-    }
-    res.status(200).json({
-        status: 'success',
-        data: {
-            product
-        }
-    });
 
-})
-
-
-
-
-
+const DeleteProduct= factory.deleteOne(productModel);
 
 
 module.exports = {

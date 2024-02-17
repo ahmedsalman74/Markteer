@@ -5,6 +5,7 @@ const asyncHandler = require('express-async-handler')
 const brandModel = require('../models/brandModel');
 const ApiFeatures = require('../utils/apiFeatures');
 const AppError = require('../utils/appError');
+const factory = require('./handelersFactory');
 
 //@desc get a list of brands
 //@route GET /api/1/brands
@@ -95,21 +96,8 @@ const updateBrand = asyncHandler(async (req, res, next) => {
 //desc delete brand
 //@route DELETE /api/1/categories/:id
 //@access private
-const DeleteBrand = asyncHandler(async (req, res, next) => {
-    const brandId = req.params.id;
-    const brand = await brandModel.findByIdAndDelete(brandId);
-    if (!brand) {
-        return next(new AppError(`brand not found`, 404))
-    } else {
-        res.status(200).json({
-            status: 'success',
-            data: {
-                brand
-            }
-        });
-    }
-})
 
+const DeleteBrand = factory.deleteOne(brandModel);
 
 
 

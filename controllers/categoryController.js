@@ -4,6 +4,7 @@ const asyncHandler = require('express-async-handler')
 const CategoryModel = require('../models/categoryModel');
 const AppError = require('../utils/appError');
 const ApiFeatures = require('../utils/apiFeatures');
+const factory = require('./handelersFactory');
 
 //@desc get a list of categories
 //@route GET /api/1/categories
@@ -94,20 +95,7 @@ const updateCategory = asyncHandler(async (req, res, next) => {
 //desc delete category
 //@route DELETE /api/1/categories/:id
 //@access private
-const DeleteCategory = asyncHandler(async (req, res, next) => {
-    const categoryId = req.params.id;
-    const category = await CategoryModel.findByIdAndDelete(categoryId);
-    if (!category) {
-        return next(new AppError(`Category not found`, 404))
-    } else {
-        res.status(200).json({
-            status: 'success',
-            data: {
-                category
-            }
-        });
-    }
-})
+const DeleteCategory= factory.deleteOne(CategoryModel);
 
 
 
