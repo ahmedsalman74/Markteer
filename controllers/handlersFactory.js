@@ -47,5 +47,18 @@ exports.updateOne = (Model ) =>
         })
     })
 
-
-
+    exports.getOne=(Model)=>
+    asyncHandler(async(req,res,next)=>{
+        const {id}=req.params;
+        const document=await Model.findById(id);
+        if(!document){
+            const modelName=Model.modelName;
+            return next(new AppError(`No ${modelName} found with id ${id}`,404));
+        }
+        res.status(200).json({
+            status:'success',
+            data:{
+                document
+            }
+        }); 
+    });

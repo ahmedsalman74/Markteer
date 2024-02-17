@@ -41,24 +41,7 @@ const getProducts = asyncHandler(async (req, res, next) => {
 //@desc get a single product
 //@route GET /api/1/products/:id
 //@access public
-const getSingleProduct = asyncHandler(async (req, res, next) => {
-    const productId = req.params.id;
-    const product = await productModel.findById({ "_id": productId })
-        .populate({ path: 'category', select: 'name -_id' });
-
-    if (!product) {
-
-        return next(new AppError(`Product not found`, 404))
-
-    }
-    res.status(200).json({
-        status: 'success',
-        data: {
-            product
-        }
-    });
-
-});
+const getSingleProduct = factory.getOne(productModel);
 
 
 

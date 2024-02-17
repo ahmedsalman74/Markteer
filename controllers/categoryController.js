@@ -37,24 +37,7 @@ const getCategory = asyncHandler(async (req, res, next) => {
 //@desc get a single category
 //@route GET /api/1/categories/:id
 //@access public
-const getSingleCategory = asyncHandler(async (req, res, next) => {
-    const categoryId = req.params.id;
-    const category = await CategoryModel.findById({ "_id": categoryId });
-
-    if (!category) {
-
-        return next(new AppError(`Category not found`, 404))
-
-    } else {
-        res.status(200).json({
-            status: 'success',
-            data: {
-                category
-            }
-        });
-    }
-});
-
+const getSingleCategory = factory.getOne(CategoryModel);
 
 
 //@desc create new category

@@ -38,23 +38,7 @@ const getBrands = asyncHandler(async (req, res, next) => {
 //@desc get a single Brand
 //@route GET /api/1/brands/:id
 //@access public
-const getSingleBrand = asyncHandler(async (req, res, next) => {
-    const brandId = req.params.id;
-    const brand = await brandModel.findById({ "_id": brandId });
-
-    if (!brand) {
-
-        return next(new AppError(`Brand not found`, 404))
-
-    } else {
-        res.status(200).json({
-            status: 'success',
-            data: {
-                brand
-            }
-        });
-    }
-});
+const getSingleBrand = factory.getOne(brandModel);
 
 
 

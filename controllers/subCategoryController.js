@@ -14,23 +14,10 @@ const setCategoryIdToBody = (req, res, next) => {
 //@desc create new subCategory
 //@route POST /api/v1/subcategories
 //@access private
-const createSubCategory = asyncHandler(async (req, res, next) => {
-    
-    const { name, category } = req.body;
+const createSubCategory = factory.createOne(subCategoryModel);
 
-    const subCategories = await subCategoryModel.create({
-        name,
-        slug: slugify(name),
-        category
-    });
-    res.status(201).json({
-        status: 'success',
-        data: {
-            subCategories
-        }
-    })
 
-})
+// Create a filtered object to be used in the query
 
 const createFilteredObject = (req, res, next) => {
     let filteredObject = {};
