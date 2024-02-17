@@ -65,18 +65,7 @@ const getSingleProduct = asyncHandler(async (req, res, next) => {
 //@desc create new Product
 //@route POST /api/1/products
 //@access private
-const createProduct = asyncHandler(async (req, res, next) => {
-
-    req.body.slug = slugify(req.body.title);
-    const product = await productModel.create(req.body);
-    res.status(201).json({
-        status: 'success',
-        data: {
-            product
-        }
-    })
-
-})
+const createProduct = factory.createOne(productModel);
 
 //@desc update product
 //@route PUT /api/1/products/:id

@@ -71,23 +71,7 @@ const getSubCategories = asyncHandler(async (req, res, next) => {
 //desc get single subCategory
 //@route GET /api/v1/subcategories/:id
 //@access public
-const getSubCategory = asyncHandler(async (req, res, next) => {
-    const subcategoryId = req.params.id;
-    const subCategory = await subCategoryModel.findById({ "_id": subcategoryId });
-
-    if (!subCategory) {
-
-        return next(new AppError(`subCategory not found`, 404))
-
-    } 
-        res.status(200).json({
-            status: 'success',
-            data: {
-                subCategory
-            }
-        });
-    
-});
+const getSubCategory = factory.createOne(subCategoryModel);
 
 //desc update subCategory
 //@route put /api/v1/subcategories/:id

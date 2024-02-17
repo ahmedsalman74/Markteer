@@ -8,7 +8,11 @@ const subCategoryModel = require('../../models/subCategoryModel');
 exports.createProductValidator = [
     check('title').notEmpty().withMessage('Product Title is required')
         .isLength({ min: 3 }).withMessage('too short product Title')
-        .isLength({ max: 100 }).withMessage('too long product name'),
+        .isLength({ max: 100 }).withMessage('too long product name')
+        .custom((val, { req }) => {
+            req.body.slug = slugify(val); // Use the 'slugify' function
+            return true;
+        }),
     check('price').notEmpty().withMessage('Product price is required')
         .isNumeric().withMessage('Product price must be a number')
         .isLength({ max: 30 }).withMessage('Product price is too long'),

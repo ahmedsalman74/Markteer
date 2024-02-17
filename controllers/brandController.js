@@ -61,18 +61,7 @@ const getSingleBrand = asyncHandler(async (req, res, next) => {
 //@desc create new brand
 //@route POST /api/1/brands
 //@access private
-const createBrand = asyncHandler(async (req, res, next) => {
-    const name = req.body.name;
-
-    const brand = await brandModel.create({ name, slug: slugify(name) });
-    res.status(201).json({
-        status: 'success',
-        data: {
-            brand
-        }
-    })
-
-})
+const createBrand = factory.createOne(brandModel);
 
 //@desc update brand
 //@route PUT /api/1/brands/:id
