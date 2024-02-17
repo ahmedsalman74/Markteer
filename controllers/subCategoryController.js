@@ -3,7 +3,7 @@ const asyncHandler = require('express-async-handler')
 const subCategoryModel = require('../models/subCategoryModel');
 const AppError = require('../utils/appError');
 const ApiFeatures = require('../utils/apiFeatures');
-const factory = require('./handelersFactory');
+const factory = require('./handlersFactory');
 
 
 const setCategoryIdToBody = (req, res, next) => {

@@ -5,7 +5,7 @@ const asyncHandler = require('express-async-handler')
 const brandModel = require('../models/brandModel');
 const ApiFeatures = require('../utils/apiFeatures');
 const AppError = require('../utils/appError');
-const factory = require('./handelersFactory');
+const factory = require('./handlersFactory');
 
 //@desc get a list of brands
 //@route GET /api/1/brands
