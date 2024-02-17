@@ -81,22 +81,7 @@ const createProduct = asyncHandler(async (req, res, next) => {
 //@desc update product
 //@route PUT /api/1/products/:id
 //@access private
-const updateProduct = asyncHandler(async (req, res, next) => {
-    const productId = req.params.id;
-    if (req.body.title) { req.body.slug = slugify(req.body.title); }
-
-    const product = await productModel.findByIdAndUpdate(productId, req.body, { new: true });
-    if (!product) {
-        return next(new AppError(`product not found`, 404))
-    }
-    res.status(200).json({
-        status: 'success',
-        data: {
-            product
-        }
-    });
-
-})
+const updateProduct = factory.updateOne(productModel)
 
 //desc delete product
 //@route DELETE /api/1/products/:id

@@ -77,21 +77,7 @@ const createBrand = asyncHandler(async (req, res, next) => {
 //@desc update brand
 //@route PUT /api/1/brands/:id
 //@access private
-const updateBrand = asyncHandler(async (req, res, next) => {
-    const brandId = req.params.id;
-    const name = req.body.name;
-    const brand = await brandModel.findByIdAndUpdate(brandId, { name, slug: slugify(name) }, { new: true });
-    if (!brand) {
-        return next(new AppError(`Brand not found`, 404))
-    } else {
-        res.status(200).json({
-            status: 'success',
-            data: {
-                brand
-            }
-        });
-    }
-})
+const updateBrand = factory.updateOne(brandModel)
 
 //desc delete brand
 //@route DELETE /api/1/categories/:id
