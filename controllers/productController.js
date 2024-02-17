@@ -19,7 +19,7 @@ const getProducts = asyncHandler(async (req, res, next) => {
     const ApiFeaturesInstance = new ApiFeatures(productModel.find(), req.query)
         .paginate(documentCount)
         .filter()
-        .search() // Search after other transformations
+        .search("Products") // Search after other transformations
         .sort() // Handle sorting before search
         .limitFields()
         ;

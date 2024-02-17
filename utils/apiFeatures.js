@@ -15,23 +15,30 @@ class ApiFeatures {
         return this;
     }
 
-    search() {
+    search(modelName) {
         if (this.queryString.search) {
-          const keyword = this.queryString.search; // Convert to lowercase (optional)
-      
-          const query = {
-            $or: [
-              { title: { $regex: keyword, $options: 'i' } },
-              { description: { $regex: keyword, $options: 'i' } }
-            ]
-          };
-      
-          // Execute the query
-          this.mongooseQuery = this.mongooseQuery.find(query);
+            const keyword = this.queryString.search; // Convert to lowercase (optional)
+    
+            let query = {}
+            if (modelName === 'Products') {
+                query.$or = [
+                    { title: { $regex: keyword, $options: 'i' } },
+                    { description: { $regex: keyword, $options: 'i' } }
+                ];
+            } else {
+                query = {
+                    name: { $regex: keyword, $options: 'i' }
+                }
+            }
+    
+            // Execute the query
+            this.mongooseQuery = this.mongooseQuery.find(query);
+    
         }
-        return this;
-      }
-      
+        return this; // Ensure to return 'this' to maintain chaining
+    }
+    
+
 
     sort() {
         if (this.queryString.sort) {
@@ -54,17 +61,17 @@ class ApiFeatures {
     }
 
     paginate(documentCount) {
-        
+
         const page = this.queryString.page * 1 || 1;
         const limit = this.queryString.limit * 1 || 100;
         const skip = (page - 1) * limit;
         const endIndex = page * limit;
 
-        const paginations ={};
+        const paginations = {};
         paginations.currentPage = page;
         paginations.limit = limit;
         paginations.numberOfPages = Math.ceil(documentCount / limit);
-        
+
         //next page
         if (endIndex < documentCount) {
             paginations.nextPage = page + 1

@@ -1,8 +1,8 @@
-const subCategory = require('../models/subCategoryModel');
-const ascyncWatpper = require('../middlewares/ascyncWarpper');
 const slugify = require('slugify')
 const asyncHandler = require('express-async-handler')
+const subCategoryModel = require('../models/subCategoryModel');
 const AppError = require('../utils/appError');
+const ApiFeatures = require('../utils/apiFeatures');
 
 
 
@@ -18,7 +18,7 @@ const createSubCategory = asyncHandler(async (req, res, next) => {
     
     const { name, category } = req.body;
 
-    const subCategories = await subCategory.create({
+    const subCategories = await subCategoryModel.create({
         name,
         slug: slugify(name),
         category
@@ -44,24 +44,24 @@ const createFilteredObject = (req, res, next) => {
 //@access public
 
 const getSubCategories = asyncHandler(async (req, res, next) => {
-    const query = req.query;
-    const limit = query.limit || 10;
-    const page = query.page || 1;
-    const skip = (page - 1) * limit;
-    console.log(req.params.id);
-    
-    const subCategories = await subCategory.find(req.filteredObject, { "__v": false })
-        .limit(limit)
-        .skip(skip)
-    // .populate({
-    //     path: 'category',
-    //     select: "name -_id"
-    // });
+    //build query
+    const documentCount = await subCategoryModel.countDocuments();
+    const ApiFeaturesInstance = new ApiFeatures(subCategoryModel.find(), req.query)
+        .paginate(documentCount)
+        .filter()
+        .search("subCategory") // Search after other transformations
+        .sort() // Handle sorting before search
+        .limitFields()
+        ;
+    //execute the query
+    const { mongooseQuery, paginationResults } = ApiFeaturesInstance;
+    const subCategories = await mongooseQuery.exec();
+
 
 
     res.status(200).json({
         result: subCategories.length,
-        page: page,
+        paginationResults,
         status: 'success',
         data: {
             subCategories
@@ -73,20 +73,20 @@ const getSubCategories = asyncHandler(async (req, res, next) => {
 //@access public
 const getSubCategory = asyncHandler(async (req, res, next) => {
     const subcategoryId = req.params.id;
-    const Sub_Category = await subCategory.findById({ "_id": subcategoryId });
+    const subCategory = await subCategoryModel.findById({ "_id": subcategoryId });
 
-    if (!Sub_Category) {
+    if (!subCategory) {
 
         return next(new AppError(`subCategory not found`, 404))
 
-    } else {
+    } 
         res.status(200).json({
             status: 'success',
             data: {
-                Sub_Category
+                subCategory
             }
         });
-    }
+    
 });
 
 //desc update subCategory
@@ -95,39 +95,39 @@ const getSubCategory = asyncHandler(async (req, res, next) => {
 const updateSubCategory = asyncHandler(async (req, res, next) => {
     const subcategoryId = req.params.id;
     const { name, category } = req.body;
-    const Sub_Category = await subCategory.findByIdAndUpdate({ "_id": subcategoryId },
+    const SubCategory = await subCategoryModel.findByIdAndUpdate({ "_id": subcategoryId },
         { name, category, slug: slugify(name) },
         { new: true, runValidators: true });
 
-    if (!Sub_Category) {
+    if (!SubCategory) {
 
         return next(new AppError(`subCategory not found`, 404))
 
-    } else {
+    } 
         res.status(200).json({
             status: 'success',
             data: {
-                Sub_Category
+                SubCategory
             }
         });
-    }
+    
 });
 //desc delete usbCategory
 //@route DELETE /api/1/subcategory/:id
 //@access private
 const deleteSubCategory = asyncHandler(async (req, res, next) => {
     const subcategoryId = req.params.id;
-    const Subcategory = await subCategory.findByIdAndDelete(subcategoryId);
+    const Subcategory = await subCategoryModel.findByIdAndDelete(subcategoryId);
     if (!Subcategory) {
         return next(new AppError(`Subcategory not found`, 404))
-    } else {
+    } 
         res.status(200).json({
             status: 'success',
             data: {
                 Subcategory
             }
         });
-    }
+    
 })
 
 
