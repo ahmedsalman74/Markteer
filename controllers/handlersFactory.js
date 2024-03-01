@@ -18,10 +18,10 @@ exports.deleteOne = (Model) =>
 
     });
 
-exports.updateOne = (Model ) =>
+exports.updateOne = (Model) =>
     asyncHandler(async (req, res, next) => {
-        const {id}= req.params;
-       
+        const { id } = req.params;
+
 
         const document = await Model.findByIdAndUpdate(id, req.body, { new: true });
         if (!document) {
@@ -36,7 +36,7 @@ exports.updateOne = (Model ) =>
         });
 
     })
-    exports.createOne = (Model) =>
+exports.createOne = (Model) =>
     asyncHandler(async (req, res, next) => {
         const document = await Model.create(req.body);
         res.status(201).json({
@@ -47,18 +47,47 @@ exports.updateOne = (Model ) =>
         })
     })
 
-    exports.getOne=(Model)=>
-    asyncHandler(async(req,res,next)=>{
-        const {id}=req.params;
-        const document=await Model.findById(id);
-        if(!document){
-            const modelName=Model.modelName;
-            return next(new AppError(`No ${modelName} found with id ${id}`,404));
+exports.getOne = (Model) =>
+    asyncHandler(async (req, res, next) => {
+        const { id } = req.params;
+        const document = await Model.findById(id);
+        if (!document) {
+            const modelName = Model.modelName;
+            return next(new AppError(`No ${modelName} found with id ${id}`, 404));
         }
         res.status(200).json({
-            status:'success',
-            data:{
+            status: 'success',
+            data: {
                 document
             }
-        }); 
+        });
     });
+
+    exports.getAll = (Model, modelName=" ") =>
+     asyncHandler(async (req, res, next) => {
+        let filter={};
+        if(req.filteredObject) {
+            filter = req.filteredObject;
+        }
+    //build query
+    const documentCount = await Model.countDocuments();
+    const ApiFeaturesInstance = new ApiFeatures(Model.find(filter), req.query)
+        .paginate(documentCount)
+        .filter()
+        .search(modelName) // Search after other transformations
+        .sort() // Handle sorting before search
+        .limitFields()
+        ;
+    //execute the query
+    const { mongooseQuery, paginationResults } = ApiFeaturesInstance;
+    const document = await mongooseQuery.exec();
+
+    res.status(200).json({
+        result: document.length,
+        paginationResults,
+        status: 'success',
+        data: {
+            document
+        }
+    })
+});

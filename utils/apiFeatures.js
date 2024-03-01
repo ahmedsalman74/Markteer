@@ -20,7 +20,7 @@ class ApiFeatures {
             const keyword = this.queryString.search; // Convert to lowercase (optional)
     
             let query = {}
-            if (modelName === 'Products') {
+            if (modelName === "products") {
                 query.$or = [
                     { title: { $regex: keyword, $options: 'i' } },
                     { description: { $regex: keyword, $options: 'i' } }

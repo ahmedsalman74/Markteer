@@ -1,37 +1,11 @@
-/* eslint-disable no-else-return */
-const slugify = require('slugify')
-const asyncHandler = require('express-async-handler')
+// Description: This file contains the logic for handling requests from the category routes.
 const CategoryModel = require('../models/categoryModel');
-const AppError = require('../utils/appError');
-const ApiFeatures = require('../utils/apiFeatures');
 const factory = require('./handlersFactory');
 
 //@desc get a list of categories
 //@route GET /api/1/categories
 //@access public
-const getCategory = asyncHandler(async (req, res, next) => {
-    //build query
-    const documentCount = await CategoryModel.countDocuments();
-    const ApiFeaturesInstance = new ApiFeatures(CategoryModel.find(), req.query)
-        .paginate(documentCount)
-        .filter()
-        .search("Category") // Search after other transformations
-        .sort() // Handle sorting before search
-        .limitFields()
-        ;
-    //execute the query
-    const { mongooseQuery, paginationResults } = ApiFeaturesInstance;
-    const category = await mongooseQuery.exec();
-
-    res.status(200).json({
-        result: category.length,
-        paginationResults,
-        status: 'success',
-        data: {
-            category
-        }
-    })
-})
+const getCategory = factory.getAll(CategoryModel);
 
 
 //@desc get a single category

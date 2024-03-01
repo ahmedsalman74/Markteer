@@ -1,49 +1,18 @@
-
-const slugify = require('slugify')
-const asyncHandler = require('express-async-handler')
-const AppError = require('../utils/appError');
+// Description: It Contain all the product related methods.
 const factory = require('./handlersFactory');
 const productModel = require('../models/productModel');
-const ApiFeatures = require('../utils/apiFeatures');
-
-
-
 
 
 //@desc get list of all products
 //@route GET /api/1/products
 //@access public
-const getProducts = asyncHandler(async (req, res, next) => {
-    //build query
-    const documentCount=await productModel.countDocuments();
-    const ApiFeaturesInstance = new ApiFeatures(productModel.find(), req.query)
-        .paginate(documentCount)
-        .filter()
-        .search("Products") // Search after other transformations
-        .sort() // Handle sorting before search
-        .limitFields()
-        ;
-    //execute the query
-    const{mongooseQuery,paginationResults} = ApiFeaturesInstance;
-    const product = await mongooseQuery.exec();
-
-    res.status(200).json({
-        paginationResults,
-        result: product.length,
-        status: 'success',
-        data: {
-            product
-        }
-    })
-})
+const getProducts = factory.getAll(productModel,"products");
 
 
 //@desc get a single product
 //@route GET /api/1/products/:id
 //@access public
 const getSingleProduct = factory.getOne(productModel);
-
-
 
 //@desc create new Product
 //@route POST /api/1/products
