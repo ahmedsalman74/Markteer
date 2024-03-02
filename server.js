@@ -1,3 +1,4 @@
+const path=require('path')
 const express = require('express');
 const morgan = require('morgan');
 const dotenv = require('dotenv')
@@ -20,8 +21,12 @@ dbConnection()
 
 const app = express();
 
+
 //middlewares
 app.use(express.json());
+app.use(express.static(path.join(__dirname, 'uploads')));
+
+
 const NODE_ENV = process.env.NODE_ENV
 if (NODE_ENV === 'development') {
     app.use(morgan('dev'))

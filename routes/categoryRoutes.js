@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { updateCategory, getCategory, createCategory, getSingleCategory, DeleteCategory } = require('../controllers/categoryController');
+const { updateCategory, getCategory, createCategory, getSingleCategory, DeleteCategory ,uploadCategoryImage,resizeImage} = require('../controllers/categoryController');
 const { getCategoryValidator, updateCategoryValidator, deleteCategoryValidator, creatCategoryValidator } = require('../utils/validations/categoryValidator')
 
 
@@ -7,11 +7,11 @@ const SubCategoriesRoute = require('./subCategoryRoutes')
 
 router.route('/')
     .get(getCategory)
-    .post(creatCategoryValidator, createCategory)
+    .post(uploadCategoryImage,resizeImage,creatCategoryValidator, createCategory)
 
 router.route('/:id')
     .get(getCategoryValidator, getSingleCategory)
-    .put(updateCategoryValidator, updateCategory)
+    .put(uploadCategoryImage,resizeImage,updateCategoryValidator, updateCategory)
     .delete(deleteCategoryValidator, DeleteCategory)
 router.use('/:id/subcategories', SubCategoriesRoute)
 
