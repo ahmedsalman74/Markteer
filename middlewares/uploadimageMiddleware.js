@@ -1,31 +1,27 @@
 const multer = require('multer');
 const AppError = require('../utils/appError');
 
-exports.uploadSingleImage = (fieldName) => {
+
+
+
+const multerOptions = () => {
 
     const multerStorage = multer.memoryStorage();
+
     const multerFilter = function (req, file, cb) {
         if (file.mimetype.startsWith('image')) {
             cb(null, true);
         } else {
-            cb(new AppError('Not an image! Please upload only images', 400), false);
+            cb(new AppError('Only Images allowed', 400), false);
         }
-    }
+    };
 
     const upload = multer({ storage: multerStorage, fileFilter: multerFilter });
-    return upload.single(fieldName);
-}
-exports.uploadMultipleImages = (arryOfFields) => {
 
-    const multerStorage = multer.memoryStorage();
-    const multerFilter = function (req, file, cb) {
-        if (file.mimetype.startsWith('image')) {
-            cb(null, true);
-        } else {
-            cb(new AppError('Not an image! Please upload only images', 400), false);
-        }
-    }
+    return upload;
+};
 
-    const upload = multer({ storage: multerStorage, fileFilter: multerFilter });
-    return upload.fields(arryOfFields);
-}
+exports.uploadSingleImage = (fieldName) => multerOptions().single(fieldName);
+
+exports.uploadMultipleImages = (arrayOfFields) =>
+    multerOptions().fields(arrayOfFields);
