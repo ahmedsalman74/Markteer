@@ -13,6 +13,8 @@ const productRoute = require('./routes/productRoutes');
 const brandRoute = require('./routes/brandRoutes');
 const subCategoryRoute = require('./routes/subCategoryRoutes');
 
+const userRoute = require('./routes/userRoutes');
+
 
 // DB connection
 dbConnection()
@@ -39,6 +41,7 @@ app.use('/api/v1/categories', categoryRoute);
 app.use('/api/v1/products', productRoute);
 app.use('/api/v1/brands', brandRoute);
 app.use('/api/v1/subCategories', subCategoryRoute);
+app.use('/api/v1/users', userRoute);
 
 //error routes handler
 app.all('*', (req, res, next) => {
