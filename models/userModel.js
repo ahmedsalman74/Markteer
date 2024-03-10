@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -48,12 +49,6 @@ const userSchema = new mongoose.Schema({
         default: true,
     },
     
-    resetPasswordToken: {
-        type: String,
-    },
-    resetPasswordExpire: {
-        type: Date,
-    },
    
 
 
@@ -62,6 +57,14 @@ const userSchema = new mongoose.Schema({
 },
     { timestamps: true }
 );
+
+userSchema.pre('save', async function (next) {
+    if (!this.isModified('password')) return next();
+    // Hashing user password
+    this.password = await bcrypt.hash(this.password, 12);
+    next();
+  });
+
 const setImageUrl = (doc) => {
     if (doc.image) {
         doc.image = `${process.env.BASE_URL}/users/${doc.image}`

@@ -5,24 +5,28 @@ const {
     createUser,
     getSingleUser,
     DeleteUser,
+    changePassword,
     uploadUserImage,
     resizeImage } = require('../controllers/userController');
 
-// const {
-//     getBrandValidator,
-//     updateBrandValidator,
-//     deleteBrandValidator,
-//     creatBrandValidator } = require('../utils/validations/brandValidator')
+const {
+    getUserValidator,
+    updateUserValidator,
+    deleteUserValidator,
+    creatUserValidator } = require('../utils/validations/userValidator')
 
-
+router.put(
+    '/changePassword/:id',
+    changePassword
+);
 router.route('/')
     .get(getUsers)
-    .post(uploadUserImage, resizeImage, createUser)
+    .post(uploadUserImage, resizeImage, creatUserValidator, createUser)
 
 router.route('/:id')
-    .get(getSingleUser)
-    .put(uploadUserImage, resizeImage, updateUser)
-    .delete(DeleteUser)
+    .get(getUserValidator,getSingleUser)
+    .put(uploadUserImage, resizeImage, updateUserValidator, updateUser)
+    .delete(deleteUserValidator, DeleteUser)
 
 
 
