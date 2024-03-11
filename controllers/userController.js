@@ -12,6 +12,7 @@ const AppError = require('../utils/appError');
 const uploadDirectory = 'uploads/users';
 
 // Ensure the upload directory exists, if not, create it
+
 if (!fs.existsSync(uploadDirectory)) {
     fs.mkdirSync(uploadDirectory, { recursive: true });
 }
