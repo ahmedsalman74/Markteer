@@ -1,5 +1,6 @@
 const { check, body } = require('express-validator')
 const slugify = require('slugify'); // Import the 'slugify' function
+const bcrypt = require('bcrypt');
 const User = require('../../models/userModel'); // Import the 'User' model
 const validatorMiddleware = require('../../middlewares/validatorMiddleware');
 
@@ -89,6 +90,34 @@ exports.updateUserValidator = [
   check('profileImg').optional(),
   check('role').optional(),
   validatorMiddleware,
+];
+
+exports.passwordConfirmationValidator = [
+  check('id').isMongoId().withMessage('Invalid User id format'),
+  check('currentPassword').notEmpty().withMessage('Current Password required'),
+
+  check('password')
+    .notEmpty()
+    .withMessage('Password required')
+    .isLength({ min: 6 })
+    .withMessage('Password must be at least 6 characters')
+    .custom(async (val, { req }) => {
+      const validuser = await User.findById(req.params.id);
+      if (!validuser) {
+        throw new Error('User not found');
+      }
+      const isCorrectPassword = await bcrypt.compare(req.body.currentPassword, validuser.password);
+      if (!isCorrectPassword) {
+        throw new Error('currentPassword is incorrect');
+      }
+      if (val !== req.body.passwordConfirm) {
+        throw new Error('Password Confirmation incorrect');
+      }
+
+    }),
+
+    validatorMiddleware
+
 ];
 
 exports.deleteUserValidator = [

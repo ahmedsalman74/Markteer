@@ -13,11 +13,12 @@ const {
     getUserValidator,
     updateUserValidator,
     deleteUserValidator,
-    creatUserValidator } = require('../utils/validations/userValidator')
+    creatUserValidator,
+    passwordConfirmationValidator } = require('../utils/validations/userValidator')
 
 router.put(
     '/changePassword/:id',
-    changePassword
+    passwordConfirmationValidator, changePassword
 );
 router.route('/')
     .get(getUsers)
