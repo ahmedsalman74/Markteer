@@ -14,6 +14,7 @@ const brandRoute = require('./routes/brandRoutes');
 const subCategoryRoute = require('./routes/subCategoryRoutes');
 
 const userRoute = require('./routes/userRoutes');
+const authRoute = require('./routes/authRoutes');
 
 
 // DB connection
@@ -42,6 +43,7 @@ app.use('/api/v1/products', productRoute);
 app.use('/api/v1/brands', brandRoute);
 app.use('/api/v1/subCategories', subCategoryRoute);
 app.use('/api/v1/users', userRoute);
+app.use('/api/v1/auth', authRoute);
 
 //error routes handler
 app.all('*', (req, res, next) => {
