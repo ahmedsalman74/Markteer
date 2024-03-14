@@ -13,16 +13,16 @@ const {
     updateBrandValidator,
     deleteBrandValidator,
     creatBrandValidator } = require('../utils/validations/brandValidator')
-
+const authService = require('../controllers/authController')
 
 router.route('/')
     .get(getBrands)
-    .post(uploadBrandImage,resizeImage,creatBrandValidator, createBrand)
+    .post(authService.protect,authService.allowedTo('admin', 'manager'),uploadBrandImage, resizeImage, creatBrandValidator, createBrand)
 
 router.route('/:id')
     .get(getBrandValidator, getSingleBrand)
-    .put(uploadBrandImage,resizeImage,updateBrandValidator, updateBrand)
-    .delete(deleteBrandValidator, DeleteBrand)
+    .put(authService.protect,authService.allowedTo('admin', 'manager'),uploadBrandImage, resizeImage, updateBrandValidator, updateBrand)
+    .delete(authService.protect,authService.allowedTo('admin'),deleteBrandValidator, DeleteBrand)
 
 
 

@@ -1,6 +1,4 @@
-const express = require('express');
 const router = require('express').Router({ mergeParams: true });
-const validatorMiddleware = require('../middlewares/validatorMiddleware');
 const {
     createSubCategory,
     getSubCategories,
@@ -15,15 +13,32 @@ const { creatSubCategoryValidator,
     updateSubCategoryValidator,
     deleteSubCategoryValidator } = require('../utils/validations/subCategoryValidator')
 
+
+const authService = require('../controllers/authController')
+
 router.route('/')
     .get(createFilteredObject, getSubCategories)
-    .post(setCategoryIdToBody, creatSubCategoryValidator, createSubCategory)
+    .post(
+        authService.protect,
+        authService.allowedTo('admin', 'manager'),
+        setCategoryIdToBody,
+        creatSubCategoryValidator,
+        createSubCategory)
 
 
 router.route('/:id')
     .get(getSubCategoryValidator, getSubCategory)
-    .put(updateSubCategoryValidator, updateSubCategory)
-    .delete(deleteSubCategoryValidator, deleteSubCategory)
+    .put(
+        authService.protect,
+        authService.allowedTo('admin', 'manager'),
+        updateSubCategoryValidator,
+        updateSubCategory)
+
+    .delete(
+        authService.protect,
+        authService.allowedTo('admin'),
+        deleteSubCategoryValidator,
+        deleteSubCategory)
 
 
 module.exports = router;

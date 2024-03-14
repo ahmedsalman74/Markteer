@@ -68,7 +68,7 @@ const protect = asyncHandler(async (req, res, next) => {
     }
     // 2) Verification token
     const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
-    console.log(decoded);
+    
     // 3) Check if user still exists
     const currentUser = await userModel.findById(decoded.userId);
     if (!currentUser) {
@@ -77,29 +77,44 @@ const protect = asyncHandler(async (req, res, next) => {
     // 4) Check if user changed password after the token was issued
     if (currentUser.passwordChangedAt) {
         const passChangedTimestamp = parseInt(
-          currentUser.passwordChangedAt.getTime() / 1000,
-          10
+            currentUser.passwordChangedAt.getTime() / 1000,
+            10
         );
         // Password changed after token created (Error)
         if (passChangedTimestamp > decoded.iat) {
-          return next(
-            new AppError(
-              'User recently changed his password. please login again..',
-              401
-            )
-          );
+            return next(
+                new AppError(
+                    'User recently changed his password. please login again..',
+                    401
+                )
+            );
         }
-      }
-    
-      req.user = currentUser;
-    next(); 
+    }
+
+    req.user = currentUser;
+    next();
 
 });
+
+const allowedTo = (...roles) =>
+    asyncHandler(async (req, res, next) => {
+        // 1) access roles
+        // 2) access registered user (req.user.role)
+      
+        if (!roles.includes(req.user.role)) {
+            
+            return next(
+                new AppError('You are not allowed to access this route', 403)
+            );
+        }
+        next();
+    });
 
 
 
 module.exports = {
     signUp,
     login,
-    protect
+    protect,
+    allowedTo
 }

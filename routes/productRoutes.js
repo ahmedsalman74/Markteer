@@ -3,16 +3,16 @@ const { updateProduct, getProducts, createProduct, getSingleProduct, DeleteProdu
 const { getProductValidator, updateProductValidator, deleteProductValidator, createProductValidator } = require('../utils/validations/productValidator')
 
 
-
+const authService = require('../controllers/authController')
 
 router.route('/')
     .get(getProducts)
-    .post(uploadMultiImages, resizeMultiImages ,createProductValidator, createProduct)
+    .post(authService.protect,authService.allowedTo('admin', 'manager'),uploadMultiImages, resizeMultiImages ,createProductValidator, createProduct)
 
 router.route('/:id')
     .get(getProductValidator, getSingleProduct)
-    .put(updateProductValidator, updateProduct)
-    .delete(deleteProductValidator, DeleteProduct)
+    .put(authService.protect,authService.allowedTo('admin', 'manager'),updateProductValidator, updateProduct)
+    .delete(authService.protect,authService.allowedTo('admin'),deleteProductValidator, DeleteProduct)
 
 
 

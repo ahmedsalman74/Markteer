@@ -16,17 +16,20 @@ const {
     creatUserValidator,
     passwordConfirmationValidator } = require('../utils/validations/userValidator')
 
+
+const authService = require('../controllers/authController')
+
 router.put(
     '/changePassword/:id',
     passwordConfirmationValidator, changePassword
 );
 router.route('/')
-    .get(getUsers)
-    .post(uploadUserImage, resizeImage, creatUserValidator, createUser)
+    .get(authService.protect,authService.allowedTo('admin', 'manager'),getUsers)
+    .post(authService.protect,authService.allowedTo('admin', 'manager'),uploadUserImage, resizeImage, creatUserValidator, createUser)
 
 router.route('/:id')
-    .get(getUserValidator,getSingleUser)
-    .put(uploadUserImage, resizeImage, updateUserValidator, updateUser)
+    .get(authService.protect,getUserValidator, getSingleUser)
+    .put(authService.protect,uploadUserImage, resizeImage, updateUserValidator, updateUser)
     .delete(deleteUserValidator, DeleteUser)
 
 
