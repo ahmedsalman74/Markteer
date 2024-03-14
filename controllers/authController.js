@@ -1,15 +1,9 @@
 const asyncHandler = require('express-async-handler');
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+
 const userModel = require('../models/userModel');
+const createToken = require('../utils/createToken');
 const AppError = require('../utils/appError');
-
-const signToken = (id) => {
-    jwt.sign({ id }, process.env.JWT_SECRET, {
-        expiresIn: process.env.JWT_EXPIRES_IN,
-    });
-};
-
 
 
 // @desc    Register a new user
@@ -25,7 +19,7 @@ const signUp = asyncHandler(async (req, res, next) => {
         phone,
     });
 
-    const token = signToken(newUser._id);
+    const token = createToken(newUser._id);
 
     res.status(201).json({
         status: 'success',
@@ -49,7 +43,7 @@ const login = asyncHandler(async (req, res, next) => {
         return next(new AppError('Incorrect email or password', 401));
     }
     // 3) If everything ok, send token to client
-    const token = signToken(user._id);
+    const token = createToken(user._id);
     // Delete password from response
     delete user._doc.password;
     // 4) send response to client side

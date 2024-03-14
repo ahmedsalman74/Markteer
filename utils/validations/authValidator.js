@@ -59,15 +59,6 @@ exports.signUpValidator = [
   validatorMiddleware,
 ];
 exports.signinValidator = [
-  check('name')
-    .notEmpty()
-    .withMessage('User required')
-    .isLength({ min: 3 })
-    .withMessage('Too short User name')
-    .custom((val, { req }) => {
-      req.body.slug = slugify(val);
-      return true;
-    }),
 
   check('email')
     .notEmpty()
