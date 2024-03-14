@@ -15,7 +15,7 @@ router.route('/singup')
 
 router.route('/login')
     
-    .get(signinValidator, login)
+    .post(signinValidator, login)
 
 
 
