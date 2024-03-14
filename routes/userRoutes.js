@@ -24,13 +24,13 @@ router.put(
     passwordConfirmationValidator, changePassword
 );
 router.route('/')
-    .get(authService.protect,authService.allowedTo('admin', 'manager'),getUsers)
+    .get(authService.protect,authService.allowedTo('admin'),getUsers)
     .post(authService.protect,authService.allowedTo('admin', 'manager'),uploadUserImage, resizeImage, creatUserValidator, createUser)
 
 router.route('/:id')
-    .get(authService.protect,getUserValidator, getSingleUser)
+    .get(authService.protect,authService.allowedTo('admin'),getUserValidator, getSingleUser)
     .put(authService.protect,uploadUserImage, resizeImage, updateUserValidator, updateUser)
-    .delete(deleteUserValidator, DeleteUser)
+    .delete(deleteUserValidator,authService.allowedTo('admin'), DeleteUser)
 
 
 
