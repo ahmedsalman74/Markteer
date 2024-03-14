@@ -25,6 +25,7 @@ const userSchema = new mongoose.Schema({
         maxlength: [30, 'Password must be at most 30 characters'],
 
     },
+    passwordChangedAt: Date,
     email: {
         type: 'string',
         required: [true, 'Password  is required'],

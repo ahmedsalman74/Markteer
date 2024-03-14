@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "rundev": "nodemon server.js",
+    "run:dev": "nodemon server.js",
     "run:prod": "NODE_ENV=production node server.js"
   },
   "keywords": [],
