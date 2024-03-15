@@ -21,11 +21,14 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: [true, 'Password  is required'],
-        minlength: [5, 'Password is too short'],
-        maxlength: [30, 'Password must be at most 30 characters'],
+        minlength: [8, 'Password is too short'],
+        
 
     },
     passwordChangedAt: Date,
+    passwordResetToken: String,
+    passwordResetExpires: Date,
+    passwordResetVerfied: Boolean,
     email: {
         type: 'string',
         required: [true, 'Password  is required'],

@@ -2,21 +2,23 @@ const router = require('express').Router();
 const {
     signUp,
     login,
+    forgotPassword
+
 } = require('../controllers/authController');
 
 
 const {
-    signUpValidator,signinValidator} = require('../utils/validations/authValidator')
+    signUpValidator, signinValidator } = require('../utils/validations/authValidator')
 
 
-router.route('/singup')
-    
-    .post(signUpValidator, signUp)
+router.post('/singup', signUpValidator, signUp)
 
 
-router.route('/login')
-    
-    .post(signinValidator, login)
+router.post('/login', signinValidator, login)
+
+router.post('/forgotpassword', forgotPassword)
+
+
 
 
 

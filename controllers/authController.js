@@ -1,3 +1,5 @@
+const crypto = require('crypto');
+
 const asyncHandler = require('express-async-handler');
 const bcrypt = require('bcryptjs');
 
@@ -68,7 +70,7 @@ const protect = asyncHandler(async (req, res, next) => {
     }
     // 2) Verification token
     const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
-    
+
     // 3) Check if user still exists
     const currentUser = await userModel.findById(decoded.userId);
     if (!currentUser) {
@@ -100,9 +102,9 @@ const allowedTo = (...roles) =>
     asyncHandler(async (req, res, next) => {
         // 1) access roles
         // 2) access registered user (req.user.role)
-      
+
         if (!roles.includes(req.user.role)) {
-            
+
             return next(
                 new AppError('You are not allowed to access this route', 403)
             );
@@ -112,9 +114,55 @@ const allowedTo = (...roles) =>
 
 
 
+
+//@dec forget password
+
+const forgotPassword = asyncHandler(async (req, res, next) => {
+    // 1) Get user based on POSTed email
+    const user = await userModel.findOne({ email: req.body.email });
+    
+    if (!user) {
+        return next(new AppError('There is no user with email address.', 404));
+    }
+    // 2) Generate the random reset token
+    const resetToken = Math.floor(100000 + Math.random() * 900000).toString(); // Limit token length to 30 characters
+
+    const hashedReset = crypto
+        .createHash('sha256')
+        .update(resetToken)
+        .digest('hex');
+
+    user.passwordResetToken = hashedReset;
+    user.passwordResetExpires = Date.now() + 10 * 60 * 1000;
+    user.passwordResetVerified = false;
+
+    await user.save();
+
+    // 3) Send it to user's email
+    // try {
+    //     const resetURL = `${req.protocol}://${req.get(
+    //         'host'
+    //     )}/api/v1/users/resetPassword/${resetToken}`;
+    //     await new Email(user, resetURL).sendPasswordReset();
+    //     res.status(200).json({
+    //         status: 'success',
+    //         message: 'Token sent to email!',
+    //     });
+    // } catch (err) {
+    //     user.passwordResetToken = undefined;
+    //     user.passwordResetExpires = undefined;
+    //     await user.save({ validateBeforeSave: false });
+    //     return next(
+    //         new AppError('There was an error sending the email. Try again later!'),
+    //         500
+    //     );
+    // }
+});
+
 module.exports = {
     signUp,
     login,
     protect,
-    allowedTo
+    allowedTo,
+    forgotPassword
 }
