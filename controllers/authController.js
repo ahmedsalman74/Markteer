@@ -7,6 +7,7 @@ const { promisify } = require('util');
 const jwt = require('jsonwebtoken');
 const userModel = require('../models/userModel');
 const createToken = require('../utils/createToken');
+const sendEmail = require('../utils/sendEmail');
 const AppError = require('../utils/appError');
 
 
@@ -120,7 +121,7 @@ const allowedTo = (...roles) =>
 const forgotPassword = asyncHandler(async (req, res, next) => {
     // 1) Get user based on POSTed email
     const user = await userModel.findOne({ email: req.body.email });
-    
+
     if (!user) {
         return next(new AppError('There is no user with email address.', 404));
     }
@@ -139,24 +140,25 @@ const forgotPassword = asyncHandler(async (req, res, next) => {
     await user.save();
 
     // 3) Send it to user's email
-    // try {
-    //     const resetURL = `${req.protocol}://${req.get(
-    //         'host'
-    //     )}/api/v1/users/resetPassword/${resetToken}`;
-    //     await new Email(user, resetURL).sendPasswordReset();
-    //     res.status(200).json({
-    //         status: 'success',
-    //         message: 'Token sent to email!',
-    //     });
-    // } catch (err) {
-    //     user.passwordResetToken = undefined;
-    //     user.passwordResetExpires = undefined;
-    //     await user.save({ validateBeforeSave: false });
-    //     return next(
-    //         new AppError('There was an error sending the email. Try again later!'),
-    //         500
-    //     );
-    // }
+    const message = `Hi ${user.name},\n We received a request to reset the password on your E-shop Account. \n ${resetToken} \n Enter this code to complete the reset. \n Thanks for helping us keep your account secure.\n The E-shop Team`;
+    try {
+        await sendEmail({
+            email: user.email,
+            subject: 'Your password reset code (valid for 10 min)',
+            message,
+        });
+    } catch (err) {
+        user.passwordResetCode = undefined;
+        user.passwordResetExpires = undefined;
+        user.passwordResetVerified = undefined;
+
+        await user.save();
+        return next(new AppError('There is an error in sending email', 500));
+    }
+
+    res
+        .status(200)
+        .json({ status: 'Success', message: 'Reset code sent to email' });
 });
 
 module.exports = {
