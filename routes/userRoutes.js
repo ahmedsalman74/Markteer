@@ -7,6 +7,8 @@ const {
     DeleteUser,
     changePassword,
     uploadUserImage,
+    loggedInUser,
+    changeMypassword,
     resizeImage } = require('../controllers/userController');
 
 const {
@@ -19,18 +21,24 @@ const {
 
 const authService = require('../controllers/authController')
 
-router.put(
-    '/changePassword/:id',
-    passwordConfirmationValidator, changePassword
-);
+router.get('/myData', authService.protect, loggedInUser, getSingleUser);
+router.put('/changeMypassword',authService.protect,passwordConfirmationValidator, changeMypassword);
+
+
+
+
+router.put('/changePassword/:id', passwordConfirmationValidator, changePassword);
+
+
+router.use(authService.protect, authService.allowedTo('admin', 'manager'))
 router.route('/')
-    .get(authService.protect,authService.allowedTo('admin'),getUsers)
-    .post(authService.protect,authService.allowedTo('admin', 'manager'),uploadUserImage, resizeImage, creatUserValidator, createUser)
+    .get(getUsers)
+    .post(uploadUserImage, resizeImage, creatUserValidator, createUser)
 
 router.route('/:id')
-    .get(authService.protect,authService.allowedTo('admin'),getUserValidator, getSingleUser)
-    .put(authService.protect,uploadUserImage, resizeImage, updateUserValidator, updateUser)
-    .delete(deleteUserValidator,authService.allowedTo('admin'), DeleteUser)
+    .get(getUserValidator, getSingleUser)
+    .put(uploadUserImage, resizeImage, updateUserValidator, updateUser)
+    .delete(deleteUserValidator, DeleteUser)
 
 
 

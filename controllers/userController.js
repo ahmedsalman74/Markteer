@@ -8,6 +8,7 @@ const { uploadSingleImage } = require('../middlewares/uploadimageMiddleware')
 const userModel = require('../models/userModel');
 const factory = require('./handlersFactory');
 const AppError = require('../utils/appError');
+const createToken = require('../utils/createToken');
 
 const uploadDirectory = 'uploads/users';
 
@@ -82,18 +83,18 @@ const changePassword = asyncHandler(async (req, res, next) => {
     const document = await userModel.findByIdAndUpdate(
         req.params.id,
         {
-          password: await bcrypt.hash(req.body.password, 12),
-          passwordChangedAt: Date.now(),
+            password: await bcrypt.hash(req.body.password, 12),
+            passwordChangedAt: Date.now(),
         },
         {
-          new: true,
+            new: true,
         }
-      );
-    
-      if (!document) {
+    );
+
+    if (!document) {
         return next(new AppError(`No document for this id ${req.params.id}`, 404));
-      }
-      res.status(200).json({ data: document });
+    }
+    res.status(200).json({ data: document });
 })
 
 //desc delete User
@@ -103,17 +104,39 @@ const changePassword = asyncHandler(async (req, res, next) => {
 const DeleteUser = factory.deleteOne(userModel);
 
 
+const loggedInUser = asyncHandler(async (req, res, next) => {
+    req.params.id = req.user.id;
+    next();
+});
 
+const changeMypassword = asyncHandler(async (req, res, next) => {
+   // 1) Update user password based user payload (req.user._id)
+  const user = await userModel.findByIdAndUpdate(
+    req.user._id,
+    {
+      password: await bcrypt.hash(req.body.password, 12),
+      passwordChangedAt: Date.now(),
+    },
+    {
+      new: true,
+    }
+  );
 
+  // 2) Generate token
+  const token = createToken(user._id);
 
+  res.status(200).json({ data: user, token });
+});
 
 module.exports = {
-    getUsers,
-    createUser,
-    getSingleUser,
-    updateUser,
-    DeleteUser,
-    uploadUserImage,
-    resizeImage,
-    changePassword
-};
+        getUsers,
+        createUser,
+        getSingleUser,
+        updateUser,
+        DeleteUser,
+        uploadUserImage,
+        resizeImage,
+        changePassword,
+        loggedInUser,
+        changeMypassword
+    };
