@@ -2,7 +2,9 @@ const router = require('express').Router();
 const {
     signUp,
     login,
-    forgotPassword
+    forgotPassword,
+    resetPassword,
+    verifyPassResetCode
 
 } = require('../controllers/authController');
 
@@ -17,6 +19,8 @@ router.post('/singup', signUpValidator, signUp)
 router.post('/login', signinValidator, login)
 
 router.post('/forgotpassword', forgotPassword)
+router.put('/resetPassword', resetPassword)
+router.post('/verifyPassResetCode', verifyPassResetCode)
 
 
 

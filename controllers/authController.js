@@ -135,7 +135,7 @@ const forgotPassword = asyncHandler(async (req, res, next) => {
 
     user.passwordResetToken = hashedReset;
     user.passwordResetExpires = Date.now() + 10 * 60 * 1000;
-    user.passwordResetVerified = false;
+    user.passwordResetVerfied = false;
 
     await user.save();
 
@@ -148,9 +148,9 @@ const forgotPassword = asyncHandler(async (req, res, next) => {
             message,
         });
     } catch (err) {
-        user.passwordResetCode = undefined;
+        user.passwordResetToken = undefined;
         user.passwordResetExpires = undefined;
-        user.passwordResetVerified = undefined;
+        user.passwordResetVerfied = undefined;
 
         await user.save();
         return next(new AppError('There is an error in sending email', 500));
@@ -161,10 +161,69 @@ const forgotPassword = asyncHandler(async (req, res, next) => {
         .json({ status: 'Success', message: 'Reset code sent to email' });
 });
 
+// @desc    Verify password reset code
+// @route   POST /api/v1/auth/verifyResetCode
+// @access  Public
+const verifyPassResetCode = asyncHandler(async (req, res, next) => {
+    // 1) Get user based on reset code
+    const hashedResetCode = crypto
+      .createHash('sha256')
+      .update(req.body.resetCode)
+      .digest('hex');
+  
+    const user = await userModel.findOne({
+      passwordResetToken: hashedResetCode,
+      passwordResetExpires: { $gt: Date.now() },
+    });
+    if (!user) {
+      return next(new AppError('Reset code invalid or expired'));
+    }
+  
+    // 2) Reset code valid
+    user.passwordResetVerfied = true;
+    await user.save();
+  
+    res.status(200).json({
+      status: 'Success',
+    });
+  });
+  
+  // @desc    Reset password
+  // @route   POST /api/v1/auth/resetPassword
+  // @access  Public
+  const resetPassword = asyncHandler(async (req, res, next) => {
+    // 1) Get user based on email
+    const user = await userModel.findOne({ email: req.body.email });
+    if (!user) {
+      return next(
+        new AppError(`There is no user with email ${req.body.email}`, 404)
+      );
+    }
+  
+    // 2) Check if reset code verified
+    if (!user.passwordResetVerfied) {
+      return next(new AppError('Reset code not verified', 400));
+    }
+  
+    user.password = req.body.newPassword;
+    user.passwordResetToken = undefined;
+    user.passwordResetExpires = undefined;
+    user.passwordResetVerfied = undefined;
+  
+    await user.save();
+  
+   
+    // 3) if everything is ok, generate token
+    const token = createToken(user._id);
+    res.status(200).json({ token });
+  });
+
 module.exports = {
     signUp,
     login,
     protect,
     allowedTo,
-    forgotPassword
+    forgotPassword,
+    resetPassword,
+    verifyPassResetCode
 }
