@@ -9,6 +9,9 @@ const {
     uploadUserImage,
     loggedInUser,
     changeMypassword,
+    updateLoggedInUser,
+    deactivateMyAccount,
+    activateMyAccount,
     resizeImage } = require('../controllers/userController');
 
 const {
@@ -21,16 +24,22 @@ const {
 
 const authService = require('../controllers/authController')
 
-router.get('/myData', authService.protect, loggedInUser, getSingleUser);
-router.put('/changeMypassword',authService.protect,passwordConfirmationValidator, changeMypassword);
+// logged in user routes
+
+router.put('/activateMyAccount',loggedInUser,activateMyAccount);
+router.use(authService.protect)
+router.get('/myData', loggedInUser, getSingleUser);
+router.put('/changeMypassword',passwordConfirmationValidator, changeMypassword);
+router.put('/updateLoggedInUser',uploadUserImage, resizeImage, updateUserValidator,updateLoggedInUser);
+router.delete('/deactivateMyAccount',deactivateMyAccount);
 
 
 
-
+// Admin routes
 router.put('/changePassword/:id', passwordConfirmationValidator, changePassword);
 
 
-router.use(authService.protect, authService.allowedTo('admin', 'manager'))
+router.use( authService.allowedTo('admin', 'manager'))
 router.route('/')
     .get(getUsers)
     .post(uploadUserImage, resizeImage, creatUserValidator, createUser)
@@ -39,9 +48,5 @@ router.route('/:id')
     .get(getUserValidator, getSingleUser)
     .put(uploadUserImage, resizeImage, updateUserValidator, updateUser)
     .delete(deleteUserValidator, DeleteUser)
-
-
-
-
 
 module.exports = router; 
