@@ -29,7 +29,7 @@ const authService = require('../controllers/authController')
 router.put('/activateMyAccount',loggedInUser,activateMyAccount);
 router.use(authService.protect)
 router.get('/myData', loggedInUser, getSingleUser);
-router.put('/changeMypassword',passwordConfirmationValidator, changeMypassword);
+router.put('/changeMypassword', changeMypassword);
 router.put('/updateLoggedInUser',uploadUserImage, resizeImage, updateUserValidator,updateLoggedInUser);
 router.delete('/deactivateMyAccount',deactivateMyAccount);
 

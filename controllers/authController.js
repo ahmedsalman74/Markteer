@@ -100,7 +100,7 @@ const protect = asyncHandler(async (req, res, next) => {
 
     req.user = currentUser;
     //for user change my password to throw id to change passwoed validator
-    req.params.id = req.user.id;
+    
     next();
 
 });
