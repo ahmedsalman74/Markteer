@@ -39,4 +39,12 @@ product: {
 
 },{timestamps:true});
 
+reviewSchema.pre(/^find/, function (next) {
+    this.populate({
+      path: 'user',
+      select: 'name -_id',
+    });
+    next();
+  });
+
 module.exports = mongoose.model('review', reviewSchema);
