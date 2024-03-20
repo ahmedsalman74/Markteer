@@ -71,7 +71,7 @@ const getProducts = factory.getAll(productModel, "products");
 //@desc get a single product
 //@route GET /api/1/products/:id
 //@access public
-const getSingleProduct = factory.getOne(productModel);
+const getSingleProduct = factory.getOne(productModel,"reviews");
 
 //@desc create new Product
 //@route POST /api/1/products

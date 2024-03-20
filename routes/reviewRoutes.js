@@ -1,10 +1,12 @@
-const router = require('express').Router();
+const router = require('express').Router({ mergeParams: true });
 const {
     updateReview,
     getReviews,
     createReview,
     getSingleReview,
     DeleteReview,
+    createFilterObj,
+    setProductIdAndUserIdToBody
 } = require('../controllers/reviewController');
 const {
     getReviewValidator,
@@ -16,8 +18,9 @@ const {
 const authService = require('../controllers/authController')
 
 router.route('/')
-    .get(getReviews)
-    .post(authService.protect, authService.allowedTo('user'), createReviewValidator, createReview)
+
+    .get(createFilterObj,getReviews)
+    .post(authService.protect, authService.allowedTo('user'),setProductIdAndUserIdToBody, createReviewValidator, createReview)
 
 router.route('/:id')
     .get(getReviewValidator, getSingleReview)

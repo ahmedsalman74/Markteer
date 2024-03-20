@@ -1,19 +1,21 @@
 const router = require('express').Router();
-const { updateProduct, getProducts, createProduct, getSingleProduct, DeleteProduct ,uploadMultiImages, resizeMultiImages } = require('../controllers/productController');
+const { updateProduct, getProducts, createProduct, getSingleProduct, DeleteProduct, uploadMultiImages, resizeMultiImages } = require('../controllers/productController');
 const { getProductValidator, updateProductValidator, deleteProductValidator, createProductValidator } = require('../utils/validations/productValidator')
 
 
 const authService = require('../controllers/authController')
+const reviewRoute = require('./reviewRoutes')
+
+router.use('/:productId/reviews', authService.protect, authService.allowedTo('user','admin', 'manager'), reviewRoute)
 
 router.route('/')
     .get(getProducts)
-    .post(authService.protect,authService.allowedTo('admin', 'manager'),uploadMultiImages, resizeMultiImages ,createProductValidator, createProduct)
+    .post(authService.protect, authService.allowedTo('admin', 'manager'), uploadMultiImages, resizeMultiImages, createProductValidator, createProduct)
 
 router.route('/:id')
     .get(getProductValidator, getSingleProduct)
-    .put(authService.protect,authService.allowedTo('admin', 'manager'),updateProductValidator, updateProduct)
-    .delete(authService.protect,authService.allowedTo('admin'),deleteProductValidator, DeleteProduct)
-
+    .put(authService.protect, authService.allowedTo('admin', 'manager'), updateProductValidator, updateProduct)
+    .delete(authService.protect, authService.allowedTo('admin'), deleteProductValidator, DeleteProduct)
 
 
 

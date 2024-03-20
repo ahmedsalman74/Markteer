@@ -1,10 +1,24 @@
 /* eslint-disable no-else-return */
 
-const asyncHandler = require('express-async-handler');
 const reviewModel = require('../models/reviewModel');
 const factory = require('./handlersFactory');
 
 
+
+const setProductIdAndUserIdToBody = (req, res, next) => {
+    if (!req.body.product) req.body.product = req.params.productId;
+    if (!req.body.user) req.body.user = req.user._id;
+    next();
+  };
+  
+// Create a filtered object to be used in the query
+
+const createFilterObj = (req, res, next) => {
+    let filterObject = {};
+    if (req.params.productId) filterObject = { product: req.params.productId };
+    req.filterObj = filterObject;
+    next();
+  };
 
 //@desc get a list of Reviews
 //@route GET /api/1/Reviews
@@ -44,5 +58,7 @@ module.exports = {
     getSingleReview,
     updateReview,
     DeleteReview,
+    setProductIdAndUserIdToBody,
+    createFilterObj
     
 };

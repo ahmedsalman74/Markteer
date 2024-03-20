@@ -47,10 +47,14 @@ exports.createOne = (Model) =>
         })
     })
 
-exports.getOne = (Model) =>
+exports.getOne = (Model ,popultionOpt) =>
     asyncHandler(async (req, res, next) => {
         const { id } = req.params;
-        const document = await Model.findById(id);
+        let qurey = Model.findById(id);
+        if(popultionOpt) {
+            qurey = qurey.populate(popultionOpt);
+        }
+        const document = await qurey;
         if (!document) {
             const modelName = Model.modelName;
             return next(new AppError(`No ${modelName} found with id ${id}`, 404));

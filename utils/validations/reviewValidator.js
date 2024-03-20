@@ -56,6 +56,20 @@ exports.updateReviewValidator = [
         }
       })
     ),
+    check('title').notEmpty().withMessage('Title is required')
+        .isLength({ min: 3 }).withMessage('Title short review')
+        .isLength({ max: 30 }).withMessage('Title long review').custom((val, { req }) => {
+            req.body.slug = slugify(val); // Use the 'slugify' function
+            return true;
+        }),
+
+    check('description').notEmpty().withMessage('Review Description is required')
+        .isLength({ min: 3 }).withMessage('Description too short review')
+        .isLength({ max: 1000 }).withMessage('Description too long review') ,
+    check('rating').notEmpty().withMessage('Rating is required')
+    .isNumeric().withMessage('Rating must be a number')
+    .isIn([1, 2, 3, 4, 5]).withMessage('Rating must be between 1 to 5'),
+
   validatorMiddleware,
 
 ];
