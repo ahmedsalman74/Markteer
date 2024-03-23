@@ -53,12 +53,12 @@ reviewSchema.pre(/^find/, function (next) {
 });
 
 reviewSchema.statics.calcAverageRatingsAndQuantity = async function (
-  productId
+  id
 ) {
  const result = await this.aggregate([
   // Stage 1: Get all reviews for the specific product
   {
-    $match: { product: productId },
+    $match: { product: id },
   },
   // Stage 2: Group reviews by productId and calculate average ratings and ratings quantity
   {
@@ -73,24 +73,42 @@ reviewSchema.statics.calcAverageRatingsAndQuantity = async function (
 
   console.log(result);
   if (result.length > 0) {
-    await Product.findByIdAndUpdate(productId, {
+    await Product.findByIdAndUpdate(id, {
       ratingsAverage: result[0].avgRatings,
       ratingsQuantity: result[0].ratingsQuantity,
     });
+    console.log(Product.ratingsAverage);
   } else {
-    await Product.findByIdAndUpdate(productId, {
+    await Product.findByIdAndUpdate(id, {
       ratingsAverage: 0,
       ratingsQuantity: 0,
     });
+    console.log('ratingsAverage');
   }
 };
 
 reviewSchema.post('save', async function () {
-  await this.constructor.calcAverageRatingsAndQuantity(this.product);
+  try {
+    await this.constructor.calcAverageRatingsAndQuantity(this.product);
+  } catch (err) {
+    console.error("Error updating product ratings:", err);
+  }
 });
 
 reviewSchema.post('remove', async function () {
-  await this.constructor.calcAverageRatingsAndQuantity(this.product);
+  try {
+    await this.constructor.calcAverageRatingsAndQuantity(this.product);
+  } catch (err) {
+    console.error("Error updating product ratings:", err);
+  }
 });
+async function updateProductRatings(id) {
+  await this.constructor.calcAverageRatingsAndQuantity(id);
+}
+
+reviewSchema.post('remove', async function () {
+  await updateProductRatings(this.product);
+});
+
 
 module.exports = mongoose.model('review', reviewSchema);
