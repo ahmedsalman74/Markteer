@@ -6,6 +6,7 @@ const {
      } = require('../controllers/wishlistController');
 
 
+const {wishlistValidator,deleteWishlistValidator} = require('../utils/validations/wishlistValidator');
 
 const authService = require('../controllers/authController')
 
@@ -16,10 +17,10 @@ router.use(authService.protect, authService.allowedTo('user'));
 
 router.route('/')
     .get(getWishlist)
-    .post(addToWishlist)
+    .post(wishlistValidator,addToWishlist)
 
 router.route('/:id')
-    .delete(removeFromWishlist)
+    .delete(deleteWishlistValidator,removeFromWishlist)
     
 
 module.exports = router; 
