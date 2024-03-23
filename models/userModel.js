@@ -22,7 +22,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Password  is required'],
         minlength: [8, 'Password is too short'],
-        
+
 
     },
     passwordChangedAt: Date,
@@ -34,26 +34,33 @@ const userSchema = new mongoose.Schema({
         required: [true, 'Password  is required'],
         unique: true,
         lowercase: true,
-        
+
     },
     phone: {
         type: 'string',
         required: [true, 'Phone  is required'],
         unique: true,
         lowercase: true,
-        
+
     },
     role: {
         type: String,
         enum: ['user', 'admin', 'manager'],
         default: 'user',
     },
+    // child reference (one to many)
+    wishlist: [
+        {
+            type: mongoose.Schema.ObjectId,
+            ref: 'Product',
+        },
+    ],
     active: {
         type: Boolean,
         default: true,
     },
-    
-   
+
+
 
 
 
@@ -67,7 +74,7 @@ userSchema.pre('save', async function (next) {
     // Hashing user password
     this.password = await bcrypt.hash(this.password, 12);
     next();
-  });
+});
 
 const setImageUrl = (doc) => {
     if (doc.image) {
