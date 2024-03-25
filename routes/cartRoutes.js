@@ -4,7 +4,8 @@ const {
     getLoggedUserCart,
     removeSpecificCartItem,
     clearCart,
-    updateCartItemQuantity
+    updateCartItemQuantity, 
+    applyCoupon
 } = require('../controllers/cartController');
 
 
@@ -16,6 +17,7 @@ router.route('/')
     .post(addProductToCart)
     .delete(clearCart)
 
+router.put('/applyCoupon', applyCoupon)
 router.route('/:itemId')
     .delete(removeSpecificCartItem)
     .put(updateCartItemQuantity)
