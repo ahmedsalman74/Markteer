@@ -28,7 +28,7 @@ const updateCoupon = factory.updateOne(couponModel)
 //@route DELETE /api/1/categories/:id
 //@access private
 
-const DeleteCoupon = factory.deleteOne(couponModel);
+const deleteCoupon = factory.deleteOne(couponModel);
 
 
 
@@ -39,5 +39,5 @@ module.exports = {
     createCoupon,
     getSingleCoupon,
     updateCoupon,
-    DeleteCoupon
+    deleteCoupon
 }
