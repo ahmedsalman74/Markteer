@@ -13,12 +13,14 @@ const productModel = require('../models/productModel');
 const calcTotalCartPrice = (cart) => {
     let totalPrice = 0;
     cart.cartItems.forEach((item) => {
-      totalPrice += item.quantity * item.price;
+        totalPrice += item.quantity * item.price;
     });
     cart.totalCartPrice = totalPrice;
     cart.totalPriceAfterDiscount = undefined;
     return totalPrice;
-  };
+};
+
+
 // @desc    Add product to chart
 // @route   POST /api/v1/chart
 // @access  privet /user
@@ -28,7 +30,7 @@ const addProductToCart = asyncHandler(async (req, res, next) => {
     const { productId, color } = req.body;
 
     const product = await productModel.findById(productId);
-    
+
     // 1) Get Cart for logged user
     let cart = await cartModel.findOne({ user: req.user._id });
     if (!cart) {
@@ -66,8 +68,54 @@ const addProductToCart = asyncHandler(async (req, res, next) => {
         message: 'Product added to cart successfully',
         numOfCartItems: cart.cartItems.length,
         data: cart,
-       
+
     });
 });
 
-module.exports = { addProductToCart };
+
+// @desc    get logged user chart
+// @route   Get /api/v1/chart
+// @access  privet /user
+
+
+const getLoggedUserCart = asyncHandler(async (req, res, next) => {
+    const cart = await cartModel.findOne({ user: req.user._id });
+  
+    if (!cart) {
+      return next(
+        new AppError(`There is no cart for this user id : ${req.user._id}`, 404)
+      );
+    }
+  
+    res.status(200).json({
+      status: 'success',
+      numOfCartItems: cart.cartItems.length,
+      data: cart,
+    });
+  });
+// @desc    update logged user chart
+// @route   PUT /api/v1/chart
+// @access  privet /user
+
+const updateCart = asyncHandler(async (req, res, next) => {
+    const cart = await cartModel.findOne({ user: req.user._id });
+    if (!cart) {
+        return next(new AppError(`There is no cart for this user id : ${req.user._id}`, 404));
+    }
+    const { cartItems } = req.body;
+    cart.cartItems = cartItems;
+    // Calculate total cart price
+    calcTotalCartPrice(cart);
+    await cart.save();
+    res.status(200).json({
+        status: 'success',
+        message: 'Cart updated successfully',
+        data: cart,
+    });
+});
+
+module.exports = {
+    addProductToCart,
+    getLoggedUserCart,
+    updateCart
+};
