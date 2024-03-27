@@ -4,6 +4,7 @@ const {
      } = require('../controllers/orderController');
 const authService = require('../controllers/authController')
 
+const {createOrderValidator} = require('../utils/validations/orderValidator')
 // logged in user routes
 
 router.use(authService.protect, authService.allowedTo('user'));
@@ -11,7 +12,7 @@ router.use(authService.protect, authService.allowedTo('user'));
 
 router.route('/')
     .get()
-    .post(createOrder)
+    .post(createOrderValidator,createOrder)
 
 router.route('/:id')
     .delete()
