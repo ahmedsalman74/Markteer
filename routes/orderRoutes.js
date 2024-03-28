@@ -3,7 +3,9 @@ const {
     createOrder,
     filterOrderForLoggedUser,
     findAllOrders,
-    findSpecificOrder
+    findSpecificOrder,
+    updateOrderToPaid,
+    updateOrderToDelivered
 } = require('../controllers/orderController');
 const authService = require('../controllers/authController')
 
@@ -14,16 +16,27 @@ router.use(authService.protect);
 
 
 router.route('/')
-    .get(authService.protect,authService.allowedTo('user','admin', 'manager'), filterOrderForLoggedUser, findAllOrders)
+    .get(authService.protect, authService.allowedTo('user', 'admin', 'manager'), filterOrderForLoggedUser, findAllOrders)
 
 
 router.route('/:cartId')
     .post(createOrderValidator, createOrder)
 
 
-router.route('/:id')
-    .get(findSpecificOrder)
+router.get('/:id',findSpecificOrder)
+    
 
+
+router.put(
+    '/:id/pay',
+    authService.allowedTo('admin', 'manager'),
+    updateOrderToPaid
+);
+router.put(
+    '/:id/deliver',
+    authService.allowedTo('admin', 'manager'),
+    updateOrderToDelivered
+);
 
 
 module.exports = router; 
