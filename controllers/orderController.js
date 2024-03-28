@@ -57,21 +57,24 @@ const createOrder = asyncHandler(async (req, res, next) => {
 });
 
 const filterOrderForLoggedUser = asyncHandler(async (req, res, next) => {
-    if (req.user.role === 'user') req.filterObj = { user: req.user._id };
+    if (req.user.role === 'user') req.filteredObject = { user: req.user._id };
     next();
 });
 
 // @desc    Get all orders
 // @route   POST /api/v1/orders
 // @access  Protected/User-Admin-Manager
-exports.findAllOrders = factory.getAll(Order);
+const findAllOrders = factory.getAll(Order);
 
 // @desc    Get all orders
 // @route   POST /api/v1/orders
 // @access  Protected/User-Admin-Manager
-exports.findSpecificOrder = factory.getOne(Order);
+const findSpecificOrder = factory.getOne(Order);
 
 module.exports = {
     createOrder,
-    filterOrderForLoggedUser
+    filterOrderForLoggedUser,
+    findAllOrders,
+    findSpecificOrder
+
 };
