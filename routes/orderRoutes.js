@@ -12,10 +12,10 @@ router.use(authService.protect, authService.allowedTo('user'));
 
 router.route('/')
     .get()
-    .post(createOrderValidator,createOrder)
+    
 
-router.route('/:id')
-    .delete()
+router.route('/:cartId')
+    .post(createOrderValidator,createOrder)
     
 
 module.exports = router; 
