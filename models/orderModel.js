@@ -4,7 +4,7 @@ const orderSchema = new mongoose.Schema(
   {
     user: {
       type: mongoose.Schema.ObjectId,
-      ref: 'User',
+      ref: 'user',
       required: [true, 'Order must be belong to user'],
     },
     cartItems: [
@@ -55,4 +55,15 @@ const orderSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+orderSchema.pre(/^find/, function (next) {
+    this.populate({
+      path: 'user',
+      select: 'name image email phone',
+    }).populate({
+      path: 'cartItems.product',
+      select: 'title imageCover ',
+    });
+  
+    next();
+  });
 module.exports= mongoose.model('Order', orderSchema);
