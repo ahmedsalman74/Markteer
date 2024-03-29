@@ -2,6 +2,8 @@ const path=require('path')
 const express = require('express');
 const morgan = require('morgan');
 const dotenv = require('dotenv')
+const cors = require('cors');
+const compression = require('compression');
 
 dotenv.config({ path: 'config.env' })
 const dbConnection = require('./config/connections');
@@ -18,6 +20,11 @@ dbConnection()
 
 const app = express();
 
+//enable cors middleware for all domains
+app.use(cors());
+app.options('*', cors());
+
+app.use(compression());
 
 //middlewares
 app.use(express.json());
