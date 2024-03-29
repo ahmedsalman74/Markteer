@@ -5,7 +5,8 @@ const {
     findAllOrders,
     findSpecificOrder,
     updateOrderToPaid,
-    updateOrderToDelivered
+    updateOrderToDelivered,
+    checkOutSession
 } = require('../controllers/orderController');
 const authService = require('../controllers/authController')
 
@@ -14,6 +15,12 @@ const { createOrderValidator } = require('../utils/validations/orderValidator')
 
 router.use(authService.protect);
 
+
+router.get(
+    '/checkout-session/:cartId',
+    authService.allowedTo('user'),
+    checkOutSession
+  );
 
 router.route('/')
     .get(authService.protect, authService.allowedTo('user', 'admin', 'manager'), filterOrderForLoggedUser, findAllOrders)

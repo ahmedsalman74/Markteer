@@ -116,7 +116,6 @@ const updateOrderToDelivered = asyncHandler(async (req, res, next) => {
 
     res.status(200).json({ status: 'success', data: updatedOrder });
 });
-
 const checkOutSession = asyncHandler(async (req, res, next) => {
     const taxPrice = 0;
     const shippingPrice = 0;
@@ -139,9 +138,13 @@ const checkOutSession = asyncHandler(async (req, res, next) => {
     const session = await stripe.checkout.sessions.create({
         line_items: [
             {
-                name: req.user.name,
-                amount: totalOrderPrice * 100,
-                currency: 'egp',
+                price_data: {
+                    currency: 'egp',
+                    product_data: {
+                        name: req.user.name,
+                    },
+                    unit_amount: totalOrderPrice * 100,
+                },
                 quantity: 1,
             },
         ],
