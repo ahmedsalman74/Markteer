@@ -1,4 +1,4 @@
-const path=require('path')
+const path = require('path')
 const express = require('express');
 const morgan = require('morgan');
 const dotenv = require('dotenv')
@@ -11,6 +11,7 @@ const AppError = require('./utils/appError');
 const globalErrors = require('./middlewares/errorMiddleware');
 // import routes
 const mountRouts = require('./routes');
+const { webhookCheckout } = require('./controllers/orderController');
 
 
 // DB connection
@@ -25,6 +26,15 @@ app.use(cors());
 app.options('*', cors());
 
 app.use(compression());
+
+// Checkout webhook
+
+app.post(
+    '/webhook-checkout',
+    express.raw({ type: 'application/json' }),
+    webhookCheckout
+);
+
 
 //middlewares
 app.use(express.json());
@@ -54,16 +64,16 @@ app.use(globalErrors);
 
 
 const Port = process.env.PORT || 8000;
-const server =app.listen(Port, (req, res) => {
+const server = app.listen(Port, (req, res) => {
     console.log(`listening to port ${Port} 🚀🚀`);
 });
 
 //handle unhandled promise rejection
-process.on('unhandledRejection',(err) => {
+process.on('unhandledRejection', (err) => {
     console.error(`unhandledRejection ${err}`)
     server.close(() => {
         console.error(`shutting down ...... `)
         process.exit(1)
     })
-    
+
 })
