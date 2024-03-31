@@ -9,6 +9,7 @@ const userModel = require('../models/userModel');
 const createToken = require('../utils/createToken');
 const sendEmail = require('../utils/sendEmail');
 const AppError = require('../utils/appError');
+const {sanitizeUser} = require('../utils/sanitizeData');
 
 
 // @desc    Register a new user
@@ -29,7 +30,7 @@ const signUp = asyncHandler(async (req, res, next) => {
     res.status(201).json({
         status: 'success',
         data: {
-            user: newUser,
+            user: sanitizeUser(newUser),
         },
         token: token,
     });
@@ -56,7 +57,8 @@ const login = asyncHandler(async (req, res, next) => {
     // Delete password from response
     delete user._doc.password;
     // 4) send response to client side
-    res.status(200).json({ data: user, token });
+    
+    res.status(200).json({ data: sanitizeUser(user), token });
 })
 
 
