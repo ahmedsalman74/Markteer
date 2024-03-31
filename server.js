@@ -5,6 +5,8 @@ const dotenv = require('dotenv')
 const cors = require('cors');
 const compression = require('compression');
 const hpp = require('hpp');
+const mongoSanitize = require('express-mongo-sanitize');
+const { xss } = require('express-xss-sanitizer');
 
 dotenv.config({ path: 'config.env' })
 const dbConnection = require('./config/connections');
@@ -61,7 +63,11 @@ app.use(hpp({
     ],
 }));
 
+// middleware to protect against HTTP Parameter Pollution attacks with mongoDB 
+app.use(mongoSanitize());
 
+// middleware to protect against cross site scripting attacks
+app.use(xss())
 //router routes
 mountRouts(app);
 

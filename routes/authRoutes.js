@@ -12,7 +12,7 @@ const createRateLimiter = require('../utils/appRateLimiter');
 // Create rate limiters for all routes that need them
 const Loginlimiter = createRateLimiter(10, "Too many requests please try again later after 3 minutes", 3);
 const forgotPasswordlimiter = createRateLimiter(3, "Too many requests please try again later after 5 minutes", 5);
-const singuplimiter = createRateLimiter(5, "Too many requests please try again later after 15 minutes", 15);
+const singuplimiter = createRateLimiter(20, "Too many requests please try again later after 15 minutes", 15);
 
 
 const {
