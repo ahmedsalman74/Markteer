@@ -1,4 +1,4 @@
-
+const { rateLimit } = require('express-rate-limit')
 //import routs
 const categoryRoute = require('./categoryRoutes');
 const productRoute = require('./productRoutes');
@@ -14,11 +14,22 @@ const orderRoute = require('./orderRoutes');
 const userRoute = require('./userRoutes');
 const authRoute = require('./authRoutes');
 
+const limiter = rateLimit({
+	windowMs: 15 * 60 * 1000, // 15 minutes
+	max: 3, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
+    message:"Rate limit exceeded, please try again later after 15 minutes",
+	standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+	legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+})
+
+
 
 
 const mountRouts = (app) => {
+  
+
     app.use('/api/v1/categories', categoryRoute);
-    app.use('/api/v1/products', productRoute);
+    app.use('/api/v1/products',limiter, productRoute);
     app.use('/api/v1/brands', brandRoute);
     app.use('/api/v1/subCategories', subCategoryRoute);
     app.use('/api/v1/users', userRoute);
