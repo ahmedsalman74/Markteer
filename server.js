@@ -4,6 +4,7 @@ const morgan = require('morgan');
 const dotenv = require('dotenv')
 const cors = require('cors');
 const compression = require('compression');
+const hpp = require('hpp');
 
 dotenv.config({ path: 'config.env' })
 const dbConnection = require('./config/connections');
@@ -37,7 +38,7 @@ app.post(
 
 
 //middlewares
-app.use(express.json({limit:'20kb'}));
+app.use(express.json({ limit: '20kb' }));
 app.use(express.static(path.join(__dirname, 'uploads')));
 
 
@@ -48,8 +49,22 @@ if (NODE_ENV === 'development') {
 }
 
 
+//middleware to protect against HTTP Parameter Pollution attacks
+
+app.use(hpp({
+    whitelist: [
+        'price',
+        'sold',
+        'quantity',
+        'ratingsAverage',
+        'ratingsQuantity',
+    ],
+}));
+
+
 //router routes
 mountRouts(app);
+
 
 //error routes handler
 app.all('*', (req, res, next) => {
