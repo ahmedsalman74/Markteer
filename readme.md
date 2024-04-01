@@ -73,7 +73,206 @@ To run the Markteer API locally, follow these steps:
 - **Delete product**: `DELETE /api/v1/products/:id`
   - Deletes a product identified by its ID.
 
-... (and so on for all other endpoints)
+
+### Sub Categories
+
+- **Get all subcategories**: `GET /api/v1/subCategories`
+  - Returns a list of all subcategories.
+
+- **Add new subcategory**: `POST /api/v1/subCategories`
+  - Adds a new subcategory.
+
+- **Get specific subcategory**: `GET /api/v1/subCategories/:id`
+  - Returns details of a specific subcategory identified by its ID.
+
+- **Update subcategory**: `PUT /api/v1/subCategories/:id`
+  - Updates an existing subcategory identified by its ID.
+
+- **Delete subcategory**: `DELETE /api/v1/subCategories/:id`
+  - Deletes a subcategory identified by its ID.
+
+### Categories/Sub
+
+- **Get all subcategories for specific category**: `GET /api/v1/categories/:categoryId/subcategories`
+  - Returns a list of all subcategories for a specific category identified by its ID.
+
+- **Create subcategory for specific category**: `POST /api/v1/categories/:categoryId/subcategories`
+  - Creates a new subcategory for a specific category identified by its ID.
+
+### Brands
+
+- **Get all brands**: `GET /api/v1/brands`
+  - Returns a list of all brands.
+
+- **Add new brand**: `POST /api/v1/brands`
+  - Adds a new brand.
+
+- **Get specific brand**: `GET /api/v1/brands/:id`
+  - Returns details of a specific brand identified by its ID.
+
+- **Update brand**: `PUT /api/v1/brands/:id`
+  - Updates an existing brand identified by its ID.
+
+- **Delete brand**: `DELETE /api/v1/brands/:id`
+  - Deletes a brand identified by its ID.
+
+## Users
+
+- **Get all users**: `GET /api/v1/users`
+  - Returns a list of all users.
+
+- **Add new user**: `POST /api/v1/users`
+  - Adds a new user.
+
+- **Get specific user**: `GET /api/v1/users/:id`
+  - Returns details of a specific user identified by its ID.
+
+- **Update user**: `PUT /api/v1/users/:id`
+  - Updates an existing user identified by its ID.
+
+- **Deactivate user**: `PUT /api/v1/users/:id`
+  - Deactivates a user account identified by its ID.
+
+- **Delete user**: `DELETE /api/v1/users/:id`
+  - Deletes a user identified by its ID.
+
+- **Change password**: `PUT /api/v1/users/:id/password`
+  - Changes the password of a user identified by its ID.
+
+## Auth
+
+- **Signup**: `POST /api/v1/auth/signup`
+  - Allows a user to sign up by providing necessary details.
+
+- **Signin**: `POST /api/v1/auth/login`
+  - Allows a user to sign in by providing credentials.
+
+- **Forgot Password**: `POST /api/v1/auth/forgotPassword`
+  - Initiates the process for resetting a forgotten password.
+
+- **Verify Password Reset Code**: `POST /api/v1/auth/verifyPassResetCode`
+  - Verifies the password reset code provided by the user.
+
+- **Reset Password**: `PUT /api/v1/auth/resetPassword`
+  - Resets the password of a user after verification.
+
+## Logged User
+
+- **Get logged user data**: `GET /api/v1/users/myData`
+  - Returns details of the logged-in user.
+
+- **Change password for logged-in user**: `PUT /api/v1/users/changeMypassword`
+  - Changes the password of the currently logged-in user.
+
+- **Update logged-in user**: `PUT /api/v1/users/updateLoggedInUser`
+  - Updates the details of the currently logged-in user.
+
+- **Delete logged-in user account**: `DELETE /api/v1/users/deactivateMyAccount`
+  - Deletes the account of the currently logged-in user.
+
+## Product Review
+
+- **Create review**: `POST /api/v1/reviews`
+  - Adds a new review for a product.
+
+- **Get all reviews**: `GET /api/v1/reviews`
+  - Returns a list of all reviews.
+
+- **Get specific review**: `GET /api/v1/reviews/:id`
+  - Returns details of a specific review identified by its ID.
+
+- **Update review**: `PUT /api/v1/reviews/:id`
+  - Updates an existing review identified by its ID.
+
+- **Delete review**: `DELETE /api/v1/reviews/:id`
+  - Deletes a review identified by its ID.
+
+## Product Reviews
+
+- **Get all reviews for specific product**: `GET /api/v1/products/:productId/reviews`
+  - Returns a list of all reviews for a specific product identified by its ID.
+
+- **Get specific review for specific product**: `GET /api/v1/products/:productId/reviews/:reviewId`
+  - Returns details of a specific review for a specific product identified by their respective IDs.
+
+- **Add review for specific product**: `POST /api/v1/products/:productId/reviews`
+  - Adds a new review for a specific product identified by its ID.
+
+## Wishlist
+
+- **Add to wishlist**: `POST /api/v1/wishlist`
+  - Adds a product to the user's wishlist.
+
+- **Get all wishlists**: `GET /api/v1/wishlist`
+  - Returns the user's wishlist.
+
+- **Remove from wishlist**: `DELETE /api/v1/wishlist/:id`
+  - Removes a product from the user's wishlist identified by its ID.
+
+## User Address
+
+- **Add address**: `POST /api/v1/address`
+  - Adds a new address for the user.
+
+- **Delete address**: `DELETE /api/v1/address/:id`
+  - Deletes an address identified by its ID.
+
+- **Get user addresses**: `GET /api/v1/address`
+  - Returns a list of all addresses associated with the user.
+
+## Coupon
+
+- **Create coupon**: `POST /api/v1/coupons`
+  - Creates a new coupon.
+
+- **Get all coupons**: `GET /api/v1/coupons`
+  - Returns a list of all coupons.
+
+- **Get specific coupon**: `GET /api/v1/coupons/:id`
+  - Returns details of a specific coupon identified by its ID.
+
+- **Update coupon**: `PUT /api/v1/coupons/:id`
+  - Updates an existing coupon identified by its ID.
+
+- **Delete coupon**: `DELETE /api/v1/coupons/:id`
+  - Deletes a coupon identified by its ID.
+## Shopping Cart
+
+- **Add product to cart**: `POST /api/v1/cart`
+  - Adds a product to the user's shopping cart.
+
+- **Get logged user cart**: `GET /api/v1/cart`
+  - Returns the user's shopping cart.
+
+- **Update specific cart item quantity**: `PUT /api/v1/cart/:id`
+  - Updates the quantity of a specific item in the user's shopping cart identified by its ID.
+
+- **Apply coupon**: `PUT /api/v1/cart/applyCoupon`
+  - Applies a coupon to the user's shopping cart.
+
+- **Delete specific cart item**: `DELETE /api/v1/cart/:id`
+  - Deletes a specific item from the user's shopping cart identified by its ID.
+
+## Order
+
+- **Create cash order**: `POST /api/v1/orders/:cartId`
+  - Creates a cash order using the contents of the user's shopping cart identified by its ID.
+
+- **Get specific order**: `GET /api/v1/orders/:cartId`
+  - Returns details of a specific order identified by its ID.
+
+- **Get all orders**: `GET /api/v1/orders`
+  - Returns a list of all orders.
+
+- **Update order to paid**: `PUT /api/v1/orders/:orderId/pay`
+  - Updates the status of a specific order identified by its ID to indicate that it has been paid.
+
+- **Update order to delivered**: `PUT /api/v1/orders/:orderId/deliver`
+  - Updates the status of a specific order identified by its ID to indicate that it has been delivered.
+
+- **Get checkout session**: `GET /api/v1/orders/checkout-session/:orderId`
+  - Returns the checkout session details for a specific order identified by its ID.
+
 
 ## Security Measures
 
