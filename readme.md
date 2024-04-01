@@ -35,7 +35,41 @@ To run the Markteer API locally, follow these steps:
     ```sh
     npm run dev
     ```
-5. The API server will start running locally at `http://localhost:3000`.
+5. The API server will start running locally at `http://localhost:8000`.
+
+## Environment Variables
+
+Before running the application, make sure you have set up the following environment variables:
+
+- **PORT**: The port number on which the server will run. Default is `8000`.
+- **NODE_ENV**: The environment mode. Set to `development` for local development.
+- **BASE_URL**: The base URL of the application. Default is `http://localhost:8000`.
+- **MONGO_URL**: The MongoDB connection URL.
+- **JWT_SECRET**: The secret key for JWT authentication.
+- **JWT_EXPIRES_IN**: The expiration time for JWT tokens.
+- **EMAIL_HOST**: The SMTP server host for sending emails.
+- **EMAIL_PORT**: The SMTP server port.
+- **EMAIL_USER**: The email address used for sending emails.
+- **EMAIL_PASSWORD**: The password for the email account.
+- **STRIPE_SECRET**: The secret key for Stripe integration.
+- **STRIPE_WEBHOOK_SECRET**: The webhook secret for Stripe integration.
+
+Here's an example of how you can set up the environment variables:
+
+```bash
+PORT=8000
+NODE_ENV=development
+BASE_URL=http://localhost:8000
+MONGO_URL=mongodb+srv://username:password@your-mongodb-url/your-database-name
+JWT_SECRET=your_jwt_secret_key
+JWT_EXPIRES_IN=1000s
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=465
+EMAIL_USER=your-email@gmail.com
+EMAIL_PASSWORD=your-email-password
+STRIPE_SECRET=your_stripe_secret_key
+STRIPE_WEBHOOK_SECRET=your_stripe_webhook_secret
+
 
 ## Endpoints
 
