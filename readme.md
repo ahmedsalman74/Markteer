@@ -307,24 +307,42 @@ STRIPE_WEBHOOK_SECRET=your_stripe_webhook_secret
 - **Get checkout session**: `GET /api/v1/orders/checkout-session/:orderId`
   - Returns the checkout session details for a specific order identified by its ID.
 
-
 ## Security Measures
 
-The Markteer API implements several security measures to ensure data integrity and protect against common vulnerabilities. These measures include:
+The Markteer API prioritizes security to ensure data integrity and protect against common vulnerabilities. Below are the comprehensive security measures implemented:
 
-- Application Security:
-  - Set request size limits.
-  - Take precautions against brute-forcing.
-  - Use Anti-CSRF tokens.
-  - Prevent HTTP Parameter Pollution.
-  - Perform input validation to prevent NoSQL query injection.
-  - Only return necessary data.
-  - Error & Exception Handling: Handle uncaught exceptions and errors in asynchronous calls.
-- Server Security:
-  - Set cookie flags appropriately.
-  - Use appropriate security headers.
+### Application Security:
 
-For more details on security measures implemented, refer to the Security Measures section in the README.
+1. **Set Request Size Limits:**
+   - The API sets limits on the size of incoming requests to prevent potential denial-of-service attacks and ensure efficient resource allocation.
+
+2. **Prevent Brute-Forcing:**
+   - Measures are in place to detect and prevent brute-force attacks on authentication endpoints, such as login and password reset.
+
+3. **Use Anti-CSRF Tokens:**
+   - Cross-Site Request Forgery (CSRF) protection is enforced by generating and validating unique tokens with each request to mitigate unauthorized actions initiated by malicious websites.
+
+4. **Prevent HTTP Parameter Pollution:**
+   - The API employs strategies to sanitize and validate incoming HTTP parameters, guarding against injection attacks and unintentional data manipulation.
+
+5. **Perform Input Validation:**
+   - Input data is thoroughly validated and sanitized to prevent various types of injection attacks, including SQL injection and NoSQL query injection.
+
+6. **Return Only Necessary Data:**
+   - Endpoints are designed to return only essential data, reducing the risk of exposing sensitive information and minimizing the potential impact of data breaches.
+
+7. **Error & Exception Handling:**
+   - Comprehensive error and exception handling mechanisms are implemented to gracefully handle unexpected failures, ensuring system stability and resilience.
+
+### Server Security:
+
+1. **Set Cookie Flags Appropriately:**
+   - Secure and HTTPOnly flags are properly configured for cookies to enhance security by preventing client-side scripts from accessing sensitive cookie data and ensuring encrypted communication over HTTPS.
+
+2. **Use Appropriate Security Headers:**
+   - Security headers, such as Content Security Policy (CSP), Strict Transport Security (HSTS), and X-Content-Type-Options, are employed to mitigate various types of attacks, including cross-site scripting (XSS) and clickjacking.
+
+These security measures collectively contribute to the robustness and reliability of the Markteer API, safeguarding both user data and system integrity.
 
 ## Payment Gateway
 
@@ -334,6 +352,6 @@ For instructions on using the payment gateway, please refer to the Payment Gatew
 
 ## Contact Information
 
-For any further assistance, inquiries, or feedback, please contact us at contact@markteer.com. We're here to help!
+For any further assistance, inquiries, or feedback, please contact us at @ahmedsalman74. We're here to help!
 
 Thank you for using Markteer API! 🚀
