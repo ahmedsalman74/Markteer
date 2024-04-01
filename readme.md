@@ -11,6 +11,7 @@ Welcome to the documentation for Markteer API, a RESTful API built using Node.js
 - [Security Measures](#security-measures)
 - [Payment Gateway](#payment-gateway)
 - [Contact Information](#contact-information)
+- [Contributing](#Contributing)
 
 ## Introduction
 
