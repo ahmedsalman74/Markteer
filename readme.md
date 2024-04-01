@@ -2,6 +2,7 @@
 
 Welcome to the documentation for Markteer API, a RESTful API built using Node.js and Express. This guide provides comprehensive information on how to use the API, including installation instructions, endpoints, security measures, and more.
 
+
 ## Table of Contents
 
 - [Introduction](#introduction)
@@ -428,6 +429,29 @@ These security measures collectively contribute to the robustness and reliabilit
 The Markteer API integrates with Stripe as the payment gateway for processing payments. This integration provides a secure and reliable payment solution for eCommerce transactions.
 
 For instructions on using the payment gateway, please refer to the Payment Gateway section in the README.
+
+## Contributing
+
+Contributions are welcome! If you'd like to contribute to Markteer, please follow these guidelines:
+
+- Fork the repository
+- Create your feature branch (`git checkout -b feature/fooBar`)
+- Commit your changes (`git commit -am 'Add some fooBar'`)
+- Push to the branch (`git push origin feature/fooBar`)
+- Create a new Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgements
+
+- Special thanks to [Ahmed Salman](https://github.com/ahmedsalman74) for developing Markteer.
+- This project was inspired by the need for an efficient marketing automation tool in today's competitive business landscape.
+
+## Support
+
+For support, bug reports, or feature requests, please [open an issue](https://github.com/ahmedsalman74/Markteer/issues) on GitHub.
 
 ## Contact Information
 
