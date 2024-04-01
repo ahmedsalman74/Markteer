@@ -69,7 +69,7 @@ EMAIL_USER=your-email@gmail.com
 EMAIL_PASSWORD=your-email-password
 STRIPE_SECRET=your_stripe_secret_key
 STRIPE_WEBHOOK_SECRET=your_stripe_webhook_secret
-
+```
 
 ## Endpoints
 
