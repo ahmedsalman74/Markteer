@@ -37,6 +37,85 @@ To run the Markteer API locally, follow these steps:
     ```
 5. The API server will start running locally at `http://localhost:8000`.
 
+## Project Structure
+project
+```
+├── config
+│   └── connections.js
+├── .eslintrc.json
+├── .gitignore
+├── package.json
+├── package-lock.json
+├── readme.md
+├── server.js
+└── controllers
+    ├── addressControler.js
+    ├── authController.js
+    ├── brandController.js
+    ├── cartController.js
+    ├── categoryController.js
+    ├── couponController.js
+    ├── handlersFactory.js
+    ├── orderController.js
+    ├── productController.js
+    ├── reviewController.js
+    ├── subCategoryController.js
+    ├── userController.js
+    └── wishlistController.js
+└── middlewares
+    ├── ascyncWarpper.js
+    ├── errorMiddleware.js
+    ├── uploadimageMiddleware.js
+    ├── validatorMiddleware.js
+    └── wishlistController.js
+└── models
+    ├── brandModel.js
+    ├── cartModel.js
+    ├── categoryModel.js
+    ├── couponModel.js
+    ├── productModel.js
+    ├── reviewModel.js
+    ├── subCategoryModel.js
+    ├── userModel.js
+    └── orderModel.js
+└── routes
+    ├── addressRouts.js
+    ├── authRoutes.js
+    ├── brandRoutes.js
+    ├── cartRoutes.js
+    ├── categoryRoutes.js
+    ├── couponRoutes.js
+    ├── index.js
+    ├── orderRoutes.js
+    ├── productRoutes.js
+    ├── reviewRoutes.js
+    ├── subCategoryRoutes.js
+    ├── userRoutes.js
+    ├── subCategoryRoutes.js
+    └── wishlistRoutes.js
+├── uploads
+└── utils
+    ├── apiFeatures.js
+    └── appError.js
+    ├── appRateLimiter.js
+    ├── createToken.js
+    ├── sanitizeData.js
+    ├── sendEmail.js
+    ├── dummyData
+    └── validations
+        ├── authValidator.js
+        ├── brandValidator.js
+        ├── cartValidator.js
+        ├── categoryValidator.js
+        ├── couponValidator.js
+        ├── orderValidator.js
+        ├── productValidator.js
+        ├── reviewValidator.js
+        ├── subCategoryValidator.js
+        ├── userValidator.js
+        └── wishlistValidator.js
+    
+```
 ## Environment Variables
 
 Before running the application, make sure you have set up the following environment variables:
