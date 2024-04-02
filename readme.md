@@ -1,4 +1,15 @@
-# Markteer API Documentation
+# Welcome to Markteer 
+
+<!-- PROJECT LOGO -->
+<br />
+<p align="center">
+    <img src="https://i.ibb.co/L0GjzpR/image.png" alt="Logo" width="900" height="500">
+  </a>
+
+  <h3 align="center">Markteer API Documentation</h3>
+</p>
+
+<h4 align="center">Ecommerce API built using NodeJS & Express & MongoDB</h4>
 
 Welcome to the documentation for Markteer API, a RESTful API built using Node.js and Express. This guide provides comprehensive information on how to use the API, including installation instructions, endpoints, security measures, and more.
 
@@ -16,6 +27,43 @@ Welcome to the documentation for Markteer API, a RESTful API built using Node.js
 ## Introduction
 
 Markteer API serves as the backend for an eCommerce application, offering various endpoints for managing categories, products, users, authentication, reviews, wishlist, orders, and more. The API is built using Node.js and Express, providing a robust and scalable solution for building eCommerce platforms.
+## Features
+
+- User authentication and authorization.
+- Categories management (create, read, update, delete).
+- Subcategories management (create, read, update, delete).
+- Brands management (create, read, update, delete).
+- Reviews management (create, read, update, delete).
+- Product management (create, read, update, delete).
+- Wishlist management (add product, delete product, read).
+- Coupons management (create, read, update, delete).
+- User management (register, login, profile).
+- Order processing (create, view, update) with cash or card.
+- Cart functionality.
+- Payment processing integration (Stripe).
+
+## Technologies Used
+
+- Node.js
+- Express.js
+- MongoDB
+- Mongoose
+- JWT
+- sharp
+- multer
+- bcrypt
+- Slugify
+- Express-Async-Handler
+- nodemailer
+- Cors
+- compression
+- hpp
+- express-rate-limit
+- express-mongo-sanitize
+- xss-clean
+- Stripe _(for payment processing)_
+
+
 
 ## Installation
 
@@ -134,23 +182,6 @@ Before running the application, make sure you have set up the following environm
 - **EMAIL_PASSWORD**: The password for the email account.
 - **STRIPE_SECRET**: The secret key for Stripe integration.
 - **STRIPE_WEBHOOK_SECRET**: The webhook secret for Stripe integration.
-
-Here's an example of how you can set up the environment variables:
-
-```bash
-PORT=8000
-NODE_ENV=development
-BASE_URL=http://localhost:8000
-MONGO_URL=mongodb+srv://username:password@your-mongodb-url/your-database-name
-JWT_SECRET=your_jwt_secret_key
-JWT_EXPIRES_IN=1000s
-EMAIL_HOST=smtp.gmail.com
-EMAIL_PORT=465
-EMAIL_USER=your-email@gmail.com
-EMAIL_PASSWORD=your-email-password
-STRIPE_SECRET=your_stripe_secret_key
-STRIPE_WEBHOOK_SECRET=your_stripe_webhook_secret
-```
 
 ## Endpoints
  
