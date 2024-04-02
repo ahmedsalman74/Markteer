@@ -3,7 +3,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
-    <img src="https://i.ibb.co/L0GjzpR/image.png" alt="Logo" width="900" height="500">
+    <img src="https://i.ibb.co/L0GjzpR/image.png" alt="Logo" width="800" height="400">
   </a>
 
   <h3 align="center">Markteer API Documentation</h3>
