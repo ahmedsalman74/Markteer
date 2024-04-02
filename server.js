@@ -7,8 +7,7 @@ const compression = require('compression');
 const hpp = require('hpp');
 const mongoSanitize = require('express-mongo-sanitize');
 const { xss } = require('express-xss-sanitizer');
-const swaggerUi = require('swagger-ui-express');
-const swaggerjsdoc = require('swagger-jsdoc');
+
 
 
 dotenv.config({ path: 'config.env' })
@@ -53,29 +52,12 @@ if (NODE_ENV === 'development') {
     console.log(`mode ${NODE_ENV}`);
 }
 
-//swagger documentation is available at /api-docs
-const options = {
-    definition: {
-        openapi: '3.0.0',
-        info: {
-            title: 'E-commerce API',
-            version: '1.0.0',
-            description: 'A simple API for an e-commerce application',
-        },
-        servers: [
-            {
-                url: `http://localhost:${process.env.PORT}`,
-            },
-        ],
-    },
-    apis: ['./swagger.js'], // Include all route files in the routes directory
-};
 
 
 
 
-const specs = swaggerjsdoc(options);
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+
+
 
 //middleware to protect against HTTP Parameter Pollution attacks
 
