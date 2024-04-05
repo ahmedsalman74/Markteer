@@ -185,7 +185,7 @@ Before running the application, make sure you have set up the following environm
 
 ## Endpoints
  
-   - [The API ENDPOINTS Throw .](https://documenter.getpostman.com/view/27149879/2sA35HXged#intro)
+   - [The API ENDPOINTS Throw .](https://app.swaggerhub.com/apis-docs/Ahmedsalman/MarkteerAPI/1.0.0)
 
 
 ## Security Measures
